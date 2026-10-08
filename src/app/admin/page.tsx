@@ -20,9 +20,7 @@ import {
   AlertCircle,
   Layers,
   BarChart3,
-  Users,
-  Compass,
-  ArrowUpRight
+  Users
 } from 'lucide-react';
 import { useSiteData } from '../../context/SiteDataContext';
 import { formatCurrency } from '../../lib/utils';
@@ -235,112 +233,7 @@ export default function AdminDashboardPage() {
         </Link>
       </div>
 
-      {/* Colorful Quick Action Shortcuts */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-            <Compass className="w-4 h-4 text-blue-600" />
-            <span>Fast Navigation Hub</span>
-          </h2>
-          <span className="text-3xs text-slate-400 font-medium">1-Click Admin Portals</span>
-        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          {[
-            {
-              label: 'Home Sections',
-              desc: 'Hero, Stats, CTA',
-              href: '/admin/home',
-              icon: Home,
-              bg: 'bg-gradient-to-br from-blue-50/90 to-white hover:from-blue-100/70',
-              border: 'border-blue-200',
-              text: 'text-blue-950',
-              iconColor: 'text-blue-600',
-              badge: 'Visual Editor'
-            },
-            {
-              label: 'Courses Catalog',
-              desc: 'Curriculum & Slugs',
-              href: '/admin/courses',
-              icon: GraduationCap,
-              bg: 'bg-gradient-to-br from-indigo-50/90 to-white hover:from-indigo-100/70',
-              border: 'border-indigo-200',
-              text: 'text-indigo-950',
-              iconColor: 'text-indigo-600',
-              badge: `${courses.length} Programmes`
-            },
-            {
-              label: 'Editorial Blogs',
-              desc: 'Articles & Bylines',
-              href: '/admin/blogs',
-              icon: BookOpen,
-              bg: 'bg-gradient-to-br from-purple-50/90 to-white hover:from-purple-100/70',
-              border: 'border-purple-200',
-              text: 'text-purple-950',
-              iconColor: 'text-purple-600',
-              badge: `${blogs.length} Articles`
-            },
-            {
-              label: 'Learner Leads',
-              desc: 'Contact & Enroll',
-              href: '/admin/inquiries',
-              icon: MailCheck,
-              bg: 'bg-gradient-to-br from-amber-50/90 to-white hover:from-amber-100/70',
-              border: 'border-amber-200',
-              text: 'text-amber-950',
-              iconColor: 'text-amber-600',
-              badge: `${newInquiries.length} Unread`
-            },
-            {
-              label: '3D Media Library',
-              desc: 'Images & Presets',
-              href: '/admin/media',
-              icon: ImageIcon,
-              bg: 'bg-gradient-to-br from-rose-50/90 to-white hover:from-rose-100/70',
-              border: 'border-rose-200',
-              text: 'text-rose-950',
-              iconColor: 'text-rose-600',
-              badge: 'Artwork Gallery'
-            },
-            {
-              label: 'Site Settings',
-              desc: 'Brand & Contacts',
-              href: '/admin/settings',
-              icon: Settings,
-              bg: 'bg-gradient-to-br from-emerald-50/90 to-white hover:from-emerald-100/70',
-              border: 'border-emerald-200',
-              text: 'text-emerald-950',
-              iconColor: 'text-emerald-600',
-              badge: 'System Config'
-            },
-          ].map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`p-4 rounded-2xl border ${item.border} ${item.bg} shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between group cursor-pointer`}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
-                    <Icon className={`w-4 h-4 ${item.iconColor}`} />
-                  </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-
-                <div>
-                  <p className={`text-xs font-extrabold ${item.text} leading-tight`}>
-                    {item.label}
-                  </p>
-                  <p className="text-3xs text-slate-500 mt-0.5 font-medium">
-                    {item.desc}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Analytics Snapshot Strip (3 colorful cards) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
