@@ -15,7 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       />
 
       {/* Main Content Area */}
-      <div className="md:pl-64 flex flex-col min-h-screen">
+      <div className="md:pl-72 flex flex-col min-h-screen">
         <AdminHeader
           onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
         />
