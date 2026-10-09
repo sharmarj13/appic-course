@@ -138,7 +138,7 @@ export default function BlogDetailPage() {
           <div className="max-w-4xl space-y-6">
             {/* Meta Tags: Category, Date, Read Time */}
             <div className="flex flex-wrap items-center gap-3 text-xs">
-              <span className="px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 text-3xs">
+              <span className="px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 text-xs">
                 {article.category}
               </span>
               <span className="flex items-center gap-1.5 text-slate-500 font-medium">
@@ -171,7 +171,7 @@ export default function BlogDetailPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-bold text-slate-900">{article.author.name}</p>
-                    <span className="px-2 py-0.5 rounded text-3xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                       Author
                     </span>
                   </div>
@@ -250,7 +250,7 @@ export default function BlogDetailPage() {
                         href={`#${sec.id}`}
                         className="flex items-start gap-2.5 py-1.5 px-2 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-50/60 transition-colors font-medium group"
                       >
-                        <span className="text-3xs font-mono font-bold text-slate-400 group-hover:text-blue-600 shrink-0 mt-0.5">
+                        <span className="text-xs font-mono font-bold text-slate-400 group-hover:text-blue-600 shrink-0 mt-0.5">
                           {String(idx + 1).padStart(2, '0')}.
                         </span>
                         <span className="line-clamp-2 leading-relaxed">
@@ -270,7 +270,7 @@ export default function BlogDetailPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-slate-900">{article.author.name}</h4>
-                    <p className="text-3xs text-slate-500 font-medium">{article.author.role}</p>
+                    <p className="text-xs text-slate-500 font-medium">{article.author.role}</p>
                   </div>
                 </div>
 
@@ -292,7 +292,7 @@ export default function BlogDetailPage() {
 
               {/* Admissions Consultation Card */}
               <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 via-indigo-50 to-white p-6 shadow-xs space-y-3">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-3xs font-bold uppercase tracking-wider bg-blue-600 text-white shadow-2xs">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-600 text-white shadow-2xs">
                   <Sparkles className="w-3 h-3" />
                   <span>Free Diagnostic</span>
                 </div>
@@ -320,7 +320,7 @@ export default function BlogDetailPage() {
           <Container>
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
               <div>
-                <span className="text-3xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
                   Recommended Reading
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-2 font-serif">

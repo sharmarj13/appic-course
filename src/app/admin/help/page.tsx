@@ -89,10 +89,10 @@ export default function AdminHelpCenterPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-1 rounded-md text-3xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
               Knowledge Base
             </span>
-            <span className="text-slate-400 text-xs">• Live Sync with /help</span>
+            <span className="text-slate-400 text-xs font-medium">• Live Sync with /help</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Help Center Guides & Articles
@@ -106,16 +106,16 @@ export default function AdminHelpCenterPage() {
           <Link
             href="/help"
             target="_blank"
-            className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50/60 hover:text-emerald-950 hover:border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3.5 h-3.5 text-emerald-700" />
             View Public Page
           </Link>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-emerald-300" />
             New Guide Article
           </button>
         </div>
@@ -195,15 +195,15 @@ export default function AdminHelpCenterPage() {
             >
               <div className="flex-1 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-3xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1">
                     <Tag className="w-2.5 h-2.5" />
                     {article.category}
                   </span>
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                   {article.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed max-w-4xl">
+                <p className="text-sm text-slate-600 leading-relaxed max-w-4xl">
                   {article.answer}
                 </p>
               </div>
@@ -303,9 +303,9 @@ export default function AdminHelpCenterPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Check className="w-4 h-4" />
+                  <Check className="w-4 h-4 text-emerald-300" />
                   {editingArticle ? 'Save Changes' : 'Publish Article'}
                 </button>
               </div>

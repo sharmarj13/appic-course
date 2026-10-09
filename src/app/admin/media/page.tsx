@@ -195,10 +195,10 @@ export default function AdminMediaPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-1 rounded-md text-3xs font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-800 border border-rose-200">
               Media & Creative Assets
             </span>
-            <span className="text-slate-400 text-xs">• 1-Click Copy for Course & Blog Covers</span>
+            <span className="text-slate-400 text-xs font-medium">• 1-Click Copy for Course & Blog Covers</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Media & Visual Asset Library
@@ -210,9 +210,9 @@ export default function AdminMediaPage() {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-2 transition-all self-start sm:self-auto cursor-pointer"
+          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all self-start sm:self-auto cursor-pointer"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-emerald-300" />
           Add Image URL to Library
         </button>
       </div>
@@ -304,7 +304,7 @@ export default function AdminMediaPage() {
                 )}
 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
-                  <span className="text-3xs text-white font-mono bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
+                  <span className="text-xs text-white font-mono bg-black/70 px-2 py-0.5 rounded backdrop-blur-xs font-semibold">
                     {asset.dimensions}
                   </span>
                   <button
@@ -312,7 +312,7 @@ export default function AdminMediaPage() {
                       e.stopPropagation();
                       setPreviewAsset(asset);
                     }}
-                    className="p-1.5 rounded-lg bg-white/30 text-white hover:bg-white/50 backdrop-blur-xs"
+                    className="p-1.5 rounded-lg bg-white/30 text-white hover:bg-white/50 backdrop-blur-xs cursor-pointer"
                     title="Inspect Full Size"
                   >
                     <Eye className="w-4 h-4" />
@@ -320,7 +320,7 @@ export default function AdminMediaPage() {
                 </div>
 
                 <div className="absolute top-3 left-3">
-                  <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase tracking-wider bg-white/90 text-blue-700 border border-slate-200 shadow-xs backdrop-blur-xs">
+                  <span className="px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider bg-white/95 text-slate-900 border border-slate-200 shadow-xs backdrop-blur-xs">
                     {asset.category}
                   </span>
                 </div>
@@ -404,19 +404,19 @@ export default function AdminMediaPage() {
 
             <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border-t border-slate-100">
               <div>
-                <span className="text-3xs uppercase font-bold text-blue-600 tracking-wider">
+                <span className="text-xs uppercase font-bold text-slate-700 tracking-wider">
                   {previewAsset.category} • {previewAsset.dimensions}
                 </span>
                 <h2 className="text-lg font-bold text-slate-900 mt-0.5">{previewAsset.title}</h2>
-                <p className="text-xs text-slate-500 mt-1 max-w-xl">{previewAsset.description}</p>
+                <p className="text-sm text-slate-500 mt-1 max-w-xl">{previewAsset.description}</p>
               </div>
 
               <div className="flex items-center gap-3 shrink-0">
                 <button
                   onClick={() => handleCopyUrl(previewAsset)}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 cursor-pointer"
                 >
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy className="w-3.5 h-3.5 text-emerald-300" />
                   {copiedId === previewAsset.id ? 'Copied!' : 'Copy URL'}
                 </button>
                 <button

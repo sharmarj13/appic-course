@@ -1,36 +1,73 @@
 "use client";
 import React from 'react';
-import { MessageSquare, GitPullRequest, Users, Compass, CheckCircle2 } from 'lucide-react';
+import {
+  MessageSquare,
+  GitPullRequest,
+  Users,
+  Compass,
+  CheckCircle2,
+  Code2,
+  Briefcase,
+  Video,
+  Layers
+} from 'lucide-react';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { useActionModal } from '../common/ActionModalContext';
+import { useSiteData } from '../../context/SiteDataContext';
 
-const PILLARS = [
-  {
-    icon: GitPullRequest,
-    title: 'Line-by-Line Code & Design Critiques',
-    text: 'Share your GitHub pull requests or Figma token files for structured feedback from mentors and peers.',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Topic-Specific Architecture Threads',
-    text: 'Dedicated channels for Full Stack, UI/UX, Applied AI, SQL Analytics, and Career Interview Prep.',
-  },
-  {
-    icon: Users,
-    title: 'Weekly Peer Study & Accountability Groups',
-    text: 'Join small cohort circles matched by time zone and target career track to stay consistent.',
-  },
-  {
-    icon: Compass,
-    title: 'Mock Interviews & Portfolio Defense',
-    text: 'Practice explaining your system trade-offs and product case studies before real hiring loops.',
-  },
-];
+const ICON_MAP: Record<string, React.ElementType> = {
+  GitPullRequest,
+  MessageSquare,
+  Users,
+  Compass,
+  Code2,
+  Briefcase,
+  Video,
+  Layers,
+};
 
 export function CommunitySection() {
   const { openAuthModal } = useActionModal();
+  const { home } = useSiteData();
+  const community = home?.community || {
+    eyebrow: 'Peer & Mentor Network',
+    title: 'You’re not learning alone.',
+    description: 'Self-paced never means isolated. Connect with 50,000+ learners, practicing mentors, and alumni across our structured discussion channels and weekly review clinics.',
+    buttonText: 'Join the Learner Community',
+    channelName: '#architecture-and-portfolio-review',
+    channelDesc: 'Active mentor & peer discussion thread',
+    membersOnlineText: '142 Members Online',
+    pillars: [
+      {
+        id: 'p1',
+        iconName: 'GitPullRequest',
+        title: 'Line-by-Line Code & Design Critiques',
+        text: 'Share your GitHub pull requests or Figma token files for structured feedback from mentors and peers.',
+      },
+      {
+        id: 'p2',
+        iconName: 'MessageSquare',
+        title: 'Topic-Specific Architecture Threads',
+        text: 'Dedicated channels for Full Stack, UI/UX, Applied AI, SQL Analytics, and Career Interview Prep.',
+      },
+      {
+        id: 'p3',
+        iconName: 'Users',
+        title: 'Weekly Peer Study & Accountability Groups',
+        text: 'Join small cohort circles matched by time zone and target career track to stay consistent.',
+      },
+      {
+        id: 'p4',
+        iconName: 'Compass',
+        title: 'Mock Interviews & Portfolio Defense',
+        text: 'Practice explaining your system trade-offs and product case studies before real hiring loops.',
+      },
+    ],
+  };
+
+  const pillars = community.pillars || [];
 
   return (
     <section id="community" className="py-8 lg:py-10 bg-[#F8FAFC] border-b border-slate-200/80">
@@ -39,18 +76,18 @@ export function CommunitySection() {
           {/* Left Column: Explanation & Pillars */}
           <div className="lg:col-span-6 space-y-6">
             <SectionHeading
-              eyebrow="Peer & Mentor Network"
-              title="You’re not learning alone."
-              description="Self-paced never means isolated. Connect with 50,000+ learners, practicing mentors, and alumni across our structured discussion channels and weekly review clinics."
+              eyebrow={community.eyebrow}
+              title={community.title}
+              description={community.description}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              {PILLARS.map((item) => {
-                const Icon = item.icon;
+              {pillars.map((item) => {
+                const Icon = ICON_MAP[item.iconName] || Users;
                 return (
                   <div
-                    key={item.title}
-                    className="rounded-xl border border-slate-200/90 bg-white p-4 space-y-2"
+                    key={item.id || item.title}
+                    className="rounded-xl border border-slate-200/90 bg-white p-4 space-y-2 shadow-xs"
                   >
                     <div className="flex items-center gap-2.5">
                       <Icon className="h-4 w-4 text-blue-600 shrink-0" />
@@ -66,7 +103,7 @@ export function CommunitySection() {
 
             <div className="pt-2">
               <Button variant="dark" onClick={() => openAuthModal('signup')}>
-                Join the Learner Community
+                {community.buttonText || 'Join the Learner Community'}
               </Button>
             </div>
           </div>
@@ -77,14 +114,14 @@ export function CommunitySection() {
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
                   <p className="text-xs font-bold text-slate-900">
-                    #architecture-and-portfolio-review
+                    {community.channelName || '#architecture-and-portfolio-review'}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    Active mentor & peer discussion thread
+                    {community.channelDesc || 'Active mentor & peer discussion thread'}
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-emerald-700 tabular-nums">
-                  ● 142 Members Online
+                  ● {community.membersOnlineText || '142 Members Online'}
                 </span>
               </div>
 

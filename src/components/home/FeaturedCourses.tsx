@@ -19,7 +19,13 @@ const FILTER_TABS: (CourseCategory | 'All')[] = [
 ];
 
 export function FeaturedCourses() {
-  const { courses } = useSiteData();
+  const { courses, home } = useSiteData();
+  const featured = home?.featuredCourses || {
+    eyebrow: 'Featured Programmes',
+    title: 'Learn skills that move your',
+    titleItalic: 'career forward.',
+    description: 'Choose practical, industry-focused programmes designed by senior practitioners. Build real portfolio systems and receive structured mentor feedback.',
+  };
   const [activeTab, setActiveTab] = useState<CourseCategory | 'All'>('All');
 
   const displayedCourses =
@@ -40,21 +46,21 @@ export function FeaturedCourses() {
         >
           <motion.div variants={fadeUpItemVariants}>
             <span className="inline-block py-1.5 px-4 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold tracking-widest uppercase mb-4">
-              Featured Programmes
+              {featured.eyebrow}
             </span>
           </motion.div>
           <motion.h2 
             variants={fadeUpItemVariants}
             className="text-3xl sm:text-4xl lg:text-5xl font-serif text-slate-900 leading-tight mb-6"
           >
-            Learn skills that move your <br className="hidden sm:block" />
-            <span className="italic text-slate-500">career forward.</span>
+            {featured.title} <br className="hidden sm:block" />
+            <span className="italic text-slate-500">{featured.titleItalic}</span>
           </motion.h2>
           <motion.p 
             variants={fadeUpItemVariants}
             className="text-lg text-slate-600 font-light max-w-2xl"
           >
-            Choose practical, industry-focused programmes designed by senior practitioners. Build real portfolio systems and receive structured mentor feedback.
+            {featured.description}
           </motion.p>
         </motion.div>
 

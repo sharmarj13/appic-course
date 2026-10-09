@@ -87,10 +87,10 @@ export default function AdminFaqsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-1 rounded-md text-3xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
-              Support & Knowledge
+            <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+              Support & Knowledge Base
             </span>
-            <span className="text-slate-400 text-xs">• Live Sync with /faqs</span>
+            <span className="text-slate-400 text-xs font-medium">• Live Sync with /faqs</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Frequently Asked Questions (FAQs)
@@ -104,16 +104,16 @@ export default function AdminFaqsPage() {
           <Link
             href="/faqs"
             target="_blank"
-            className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50/60 hover:text-emerald-950 hover:border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3.5 h-3.5 text-emerald-700" />
             View Public Page
           </Link>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-emerald-300" />
             Add New FAQ
           </button>
         </div>
@@ -193,14 +193,14 @@ export default function AdminFaqsPage() {
             >
               <div className="flex-1 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-3xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                     {faq.category}
                   </span>
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                   {faq.question}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed max-w-4xl">
+                <p className="text-sm text-slate-600 leading-relaxed max-w-4xl">
                   {faq.answer}
                 </p>
               </div>
@@ -300,9 +300,9 @@ export default function AdminFaqsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Check className="w-4 h-4" />
+                  <Check className="w-4 h-4 text-emerald-300" />
                   {editingFaq ? 'Save Changes' : 'Create FAQ'}
                 </button>
               </div>

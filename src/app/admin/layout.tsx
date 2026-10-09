@@ -7,7 +7,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[#f8faf9] text-slate-900 font-sans antialiased selection:bg-emerald-900 selection:text-white">
       {/* Sidebar (Desktop persistent + Mobile drawer) */}
       <AdminSidebar
         mobileOpen={mobileMenuOpen}

@@ -36,7 +36,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
         >
           {/* Section Heading */}
           <div className="space-y-2">
-            <span className="text-3xs font-mono font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
               Part {String(sIdx + 1).padStart(2, '0')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold font-serif text-slate-900 leading-snug tracking-tight">
@@ -75,7 +75,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
           {sec.codeSnippet && (
             <div className="rounded-2xl border border-slate-800 bg-slate-950 overflow-hidden shadow-lg">
               <div className="flex items-center justify-between px-5 py-3 bg-slate-900/90 border-b border-slate-800 text-xs">
-                <div className="flex items-center gap-2 text-slate-400 font-mono text-3xs">
+                <div className="flex items-center gap-2 text-slate-400 font-mono text-xs">
                   <Terminal className="w-3.5 h-3.5 text-blue-400" />
                   <span className="font-semibold text-slate-300">
                     {sec.codeSnippet.language.toUpperCase()}
@@ -84,7 +84,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
                 <button
                   type="button"
                   onClick={() => handleCopyCode(sec.id, sec.codeSnippet!.code)}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-3xs font-mono transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition-colors cursor-pointer"
                 >
                   {copiedCodeId === sec.id ? (
                     <>

@@ -43,8 +43,52 @@ export interface HomeTestimonial {
   id: string;
   name: string;
   role: string;
+  company?: string;
   quote: string;
   initials: string;
+  rating?: number;
+  avatarUrl?: string;
+  videoUrl?: string;
+  videoThumbnail?: string;
+}
+
+export interface HomeWorkshops {
+  eyebrow: string;
+  title: string;
+  description: string;
+  note: string;
+}
+
+export interface HomePillar {
+  id: string;
+  title: string;
+  text: string;
+  iconName: string;
+}
+
+export interface HomeCommunity {
+  eyebrow: string;
+  title: string;
+  description: string;
+  buttonText: string;
+  channelName: string;
+  channelDesc: string;
+  membersOnlineText: string;
+  pillars: HomePillar[];
+}
+
+export interface HomeFeaturedCourses {
+  eyebrow: string;
+  title: string;
+  titleItalic: string;
+  description: string;
+}
+
+export interface HomeBlogPreview {
+  eyebrow: string;
+  title: string;
+  description: string;
+  buttonText: string;
 }
 
 export interface HomeContent {
@@ -56,6 +100,7 @@ export interface HomeContent {
     ctaText: string;
     ctaLink: string;
   };
+  featuredCourses: HomeFeaturedCourses;
   whyAppic: {
     eyebrow: string;
     title: string;
@@ -69,6 +114,12 @@ export interface HomeContent {
     stages: HomeStage[];
   };
   reviews: {
+    eyebrow?: string;
+    title?: string;
+    titleGradient?: string;
+    description?: string;
+    videoSectionTitle?: string;
+    statsTitle?: string;
     ratingScore: string;
     ratingSource: string;
     yearsExp: string;
@@ -77,6 +128,9 @@ export interface HomeContent {
     studentsCount: string;
     testimonials: HomeTestimonial[];
   };
+  workshops: HomeWorkshops;
+  community: HomeCommunity;
+  blogPreview: HomeBlogPreview;
   finalCta: {
     badge: string;
     title: string;
@@ -155,6 +209,12 @@ const DEFAULT_HOME: HomeContent = {
     subtitle: 'Join over 50,000 professionals who have advanced their careers through our self-paced, expertly crafted tool skill courses.',
     ctaText: 'Start Learning Now',
     ctaLink: '/courses',
+  },
+  featuredCourses: {
+    eyebrow: 'Featured Programmes',
+    title: 'Learn skills that move your',
+    titleItalic: 'career forward.',
+    description: 'Choose practical, industry-focused programmes designed by senior practitioners. Build real portfolio systems and receive structured mentor feedback.',
   },
   whyAppic: {
     eyebrow: 'Why Appic Skill',
@@ -249,6 +309,12 @@ const DEFAULT_HOME: HomeContent = {
     ],
   },
   reviews: {
+    eyebrow: 'Success Stories',
+    title: 'Hear from our',
+    titleGradient: 'driven learners.',
+    description: 'At Appic Skill, we focus on practical outcomes. Discover how our self-paced modules and expert reviews have transformed careers.',
+    videoSectionTitle: 'Watch their journey',
+    statsTitle: 'The numbers speak for themselves.',
     ratingScore: '4.8',
     ratingSource: 'Based on 41,000+ Google Reviews',
     yearsExp: '15+',
@@ -259,25 +325,84 @@ const DEFAULT_HOME: HomeContent = {
       {
         id: 't1',
         name: 'Aarav Patel',
-        role: 'Senior Full Stack Engineer at TechCorp',
+        role: 'Senior Full Stack Engineer',
+        company: 'TechCorp',
         quote: 'The modular curriculum and mentor code reviews bridged the gap between basic coding tutorials and real enterprise production code.',
         initials: 'AP',
+        rating: 5,
+        videoUrl: 'https://cdn.iraskills.ai/wp-content/uploads/2025/01/4.mp4',
+        videoThumbnail: '',
       },
       {
         id: 't2',
         name: 'Sneha Rao',
-        role: 'Product Designer at FinTech Studio',
+        role: 'Product Designer',
+        company: 'FinTech Studio',
         quote: 'Creating real design token systems and defending them in live clinics completely transformed my interview confidence.',
         initials: 'SR',
+        rating: 5,
+        videoUrl: 'https://cdn.iraskills.ai/wp-content/uploads/2025/01/4.mp4',
+        videoThumbnail: '',
       },
       {
         id: 't3',
         name: 'Dev Sharma',
-        role: 'Data Scientist at Global Analytics',
+        role: 'Data Scientist',
+        company: 'Global Analytics',
         quote: 'Hands down the most rigorous project portfolio I have built. The instructors are staff-level practitioners who give honest critique.',
         initials: 'DS',
+        rating: 5,
+        videoUrl: 'https://cdn.iraskills.ai/wp-content/uploads/2025/01/4.mp4',
+        videoThumbnail: '',
       },
     ],
+  },
+  workshops: {
+    eyebrow: 'Interactive Cohort Clinics',
+    title: 'Learn live. Ask questions. Build faster.',
+    description: 'Supplement your self-paced modules with live interactive engineering, design, and analytics workshops led by our faculty.',
+    note: 'All live workshops include interactive Q&A, downloadable starter repositories, and session recordings.',
+  },
+  community: {
+    eyebrow: 'Peer & Mentor Network',
+    title: 'You’re not learning alone.',
+    description: 'Self-paced never means isolated. Connect with 50,000+ learners, practicing mentors, and alumni across our structured discussion channels and weekly review clinics.',
+    buttonText: 'Join the Learner Community',
+    channelName: '#architecture-and-portfolio-review',
+    channelDesc: 'Active mentor & peer discussion thread',
+    membersOnlineText: '142 Members Online',
+    pillars: [
+      {
+        id: 'p1',
+        iconName: 'GitPullRequest',
+        title: 'Line-by-Line Code & Design Critiques',
+        text: 'Share your GitHub pull requests or Figma token files for structured feedback from mentors and peers.',
+      },
+      {
+        id: 'p2',
+        iconName: 'MessageSquare',
+        title: 'Topic-Specific Architecture Threads',
+        text: 'Dedicated channels for Full Stack, UI/UX, Applied AI, SQL Analytics, and Career Interview Prep.',
+      },
+      {
+        id: 'p3',
+        iconName: 'Users',
+        title: 'Weekly Peer Study & Accountability Groups',
+        text: 'Join small cohort circles matched by time zone and target career track to stay consistent.',
+      },
+      {
+        id: 'p4',
+        iconName: 'Compass',
+        title: 'Mock Interviews & Portfolio Defense',
+        text: 'Practice explaining your system trade-offs and product case studies before real hiring loops.',
+      },
+    ],
+  },
+  blogPreview: {
+    eyebrow: 'Editorial & Career Playbooks',
+    title: 'Insights for your next career move',
+    description: 'Practical essays, architectural deep-dives, and career guides written by our teaching faculty.',
+    buttonText: 'View All Articles',
   },
   finalCta: {
     badge: 'Next Cohort & Self-Paced Access Open',
@@ -518,7 +643,27 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed.settings) setSettings(parsed.settings);
-        if (parsed.home) setHome(parsed.home);
+        if (parsed.home) {
+          setHome({
+            ...DEFAULT_HOME,
+            ...parsed.home,
+            hero: { ...DEFAULT_HOME.hero, ...(parsed.home.hero || {}) },
+            featuredCourses: { ...DEFAULT_HOME.featuredCourses, ...(parsed.home.featuredCourses || {}) },
+            whyAppic: { ...DEFAULT_HOME.whyAppic, ...(parsed.home.whyAppic || {}) },
+            journey: { ...DEFAULT_HOME.journey, ...(parsed.home.journey || {}) },
+            reviews: {
+              ...DEFAULT_HOME.reviews,
+              ...(parsed.home.reviews || {}),
+              testimonials: (parsed.home.reviews?.testimonials && parsed.home.reviews.testimonials.length > 0)
+                ? parsed.home.reviews.testimonials
+                : DEFAULT_HOME.reviews.testimonials,
+            },
+            workshops: { ...DEFAULT_HOME.workshops, ...(parsed.home.workshops || {}) },
+            community: { ...DEFAULT_HOME.community, ...(parsed.home.community || {}) },
+            blogPreview: { ...DEFAULT_HOME.blogPreview, ...(parsed.home.blogPreview || {}) },
+            finalCta: { ...DEFAULT_HOME.finalCta, ...(parsed.home.finalCta || {}) },
+          });
+        }
         if (parsed.courses) setCourses(parsed.courses);
         if (parsed.blogs) setBlogs(parsed.blogs);
         if (parsed.inquiries) setInquiries(parsed.inquiries);

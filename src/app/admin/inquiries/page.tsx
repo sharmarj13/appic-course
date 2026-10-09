@@ -84,57 +84,57 @@ export default function AdminInquiriesPage() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div>
+      <div className="pb-6 border-b border-slate-200/90">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-2.5 py-1 rounded-md text-3xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
-            CRM & Admissions
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+            Admissions & Student Advisory
           </span>
-          <span className="text-slate-400 text-xs">• Real-time Sync</span>
+          <span className="text-slate-400 text-xs font-medium">• Real-time Sync</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Learner Inquiries & Leads
+          Learner Inquiries & Leads Pipeline
         </h1>
         <p className="text-sm text-slate-500 mt-1 max-w-2xl">
-          Review, triage, and respond to incoming inquiries from the public Contact page and course consultations.
+          Review, triage, and respond to incoming candidate consultations from the Contact page and course inquiry forms.
         </p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold">New Leads</span>
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">New Leads</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-ping" />
           </div>
-          <p className="text-2xl font-black text-blue-600">{countNew}</p>
-          <p className="text-3xs text-slate-400 mt-1">Awaiting first response</p>
+          <p className="text-3xl font-extrabold text-slate-900">{countNew}</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">Awaiting first response</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold">Contacted</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Contacted</span>
             <Phone className="w-4 h-4 text-purple-600" />
           </div>
-          <p className="text-2xl font-black text-purple-600">{countContacted}</p>
-          <p className="text-3xs text-slate-400 mt-1">Outreached via mail/call</p>
+          <p className="text-3xl font-extrabold text-slate-900">{countContacted}</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">Outreached via email/call</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold">In Progress</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">In Progress</span>
             <Clock className="w-4 h-4 text-amber-600" />
           </div>
-          <p className="text-2xl font-black text-amber-600">{countInProgress}</p>
-          <p className="text-3xs text-slate-400 mt-1">Active evaluation</p>
+          <p className="text-3xl font-extrabold text-slate-900">{countInProgress}</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">Active candidate advising</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold">Resolved</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Resolved</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
-          <p className="text-2xl font-black text-emerald-600">{countResolved}</p>
-          <p className="text-3xs text-slate-400 mt-1">Enrolled or closed</p>
+          <p className="text-3xl font-extrabold text-slate-900">{countResolved}</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">Enrolled or archived</p>
         </div>
       </div>
 
@@ -147,7 +147,7 @@ export default function AdminInquiriesPage() {
             placeholder="Search by student name, email, topic, or phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50/50 border border-slate-200 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50/50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
           />
         </div>
 
@@ -157,9 +157,9 @@ export default function AdminInquiriesPage() {
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                 statusFilter === st
-                  ? 'bg-blue-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
               }`}
             >
@@ -183,15 +183,15 @@ export default function AdminInquiriesPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold text-3xs">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50/90 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold text-xs">
                 <tr>
-                  <th className="px-5 py-3.5">Learner</th>
-                  <th className="px-5 py-3.5">Topic & Background</th>
-                  <th className="px-5 py-3.5">Message Snippet</th>
-                  <th className="px-5 py-3.5">Status</th>
-                  <th className="px-5 py-3.5">Received</th>
-                  <th className="px-5 py-3.5 text-right">Actions</th>
+                  <th className="px-6 py-4">Learner Details</th>
+                  <th className="px-6 py-4">Topic & Level</th>
+                  <th className="px-6 py-4">Message Snippet</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4">Date Received</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -201,40 +201,40 @@ export default function AdminInquiriesPage() {
                     className="hover:bg-slate-50/70 transition-colors group cursor-pointer"
                     onClick={() => setActiveInquiry(inq)}
                   >
-                    <td className="px-5 py-4">
-                      <div className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center gap-2">
+                    <td className="px-6 py-4">
+                      <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center gap-2">
                         <span>{inq.fullName}</span>
                       </div>
-                      <div className="text-slate-500 text-3xs mt-0.5">{inq.email}</div>
+                      <div className="text-slate-500 text-xs mt-0.5">{inq.email}</div>
                       {inq.phone && (
-                        <div className="text-slate-400 text-3xs flex items-center gap-1 mt-0.5">
-                          <Phone className="w-2.5 h-2.5" />
+                        <div className="text-slate-400 text-xs flex items-center gap-1 mt-0.5 font-mono">
+                          <Phone className="w-3 h-3" />
                           <span>{inq.phone}</span>
                         </div>
                       )}
                     </td>
-                    <td className="px-5 py-4">
-                      <span className="font-semibold text-slate-800 block">{inq.topic}</span>
-                      <span className="text-3xs text-blue-700 font-semibold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 inline-block mt-1">
+                    <td className="px-6 py-4">
+                      <span className="font-semibold text-slate-900 block">{inq.topic}</span>
+                      <span className="text-xs text-blue-700 font-semibold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 inline-block mt-1">
                         {inq.experienceLevel}
                       </span>
                     </td>
-                    <td className="px-5 py-4 max-w-xs">
-                      <p className="line-clamp-2 text-slate-600 text-2xs leading-relaxed">
+                    <td className="px-6 py-4 max-w-xs">
+                      <p className="line-clamp-2 text-slate-600 text-xs sm:text-sm leading-relaxed">
                         {inq.message}
                       </p>
                     </td>
-                    <td className="px-5 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(inq.status)}
                     </td>
-                    <td className="px-5 py-4 text-slate-400 whitespace-nowrap text-3xs">
+                    <td className="px-6 py-4 text-slate-500 whitespace-nowrap text-xs font-mono">
                       {inq.createdAt}
                     </td>
-                    <td className="px-5 py-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                    <td className="px-6 py-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setActiveInquiry(inq)}
-                          className="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-3xs font-semibold transition-colors"
+                          className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors cursor-pointer"
                         >
                           View & Reply
                         </button>
@@ -262,14 +262,14 @@ export default function AdminInquiriesPage() {
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-3xs font-mono text-slate-400">ID: {activeInquiry.id}</span>
+                  <span className="text-xs font-mono text-slate-500">ID: {activeInquiry.id}</span>
                   {getStatusBadge(activeInquiry.status)}
                 </div>
                 <h2 className="text-xl font-bold text-slate-900">{activeInquiry.fullName}</h2>
               </div>
               <button
                 onClick={() => setActiveInquiry(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 ✕
               </button>
@@ -277,9 +277,9 @@ export default function AdminInquiriesPage() {
 
             <div className="p-6 space-y-6">
               {/* Contact Information Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
                 <div>
-                  <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                     Email Address
                   </span>
                   <a
@@ -292,7 +292,7 @@ export default function AdminInquiriesPage() {
                 </div>
 
                 <div>
-                  <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                     Phone / WhatsApp
                   </span>
                   {activeInquiry.phone ? (
@@ -309,7 +309,7 @@ export default function AdminInquiriesPage() {
                 </div>
 
                 <div>
-                  <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                     Consultation Topic
                   </span>
                   <span className="text-sm font-semibold text-slate-800 mt-1 block">
@@ -318,7 +318,7 @@ export default function AdminInquiriesPage() {
                 </div>
 
                 <div>
-                  <span className="text-3xs font-bold text-slate-500 uppercase tracking-wider block">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                     Experience Level
                   </span>
                   <span className="text-sm font-semibold text-slate-800 mt-1 block">
@@ -335,7 +335,7 @@ export default function AdminInquiriesPage() {
                 <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200 text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-sans">
                   {activeInquiry.message}
                 </div>
-                <div className="text-3xs text-slate-400 mt-1.5 flex items-center gap-1">
+                <div className="text-xs text-slate-500 mt-1.5 flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
                   Received on {activeInquiry.createdAt}
                 </div>

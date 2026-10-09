@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Container } from '../common/Container';
@@ -5,23 +6,33 @@ import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { BlogCard } from '../blog/BlogCard';
 import { BLOG_ARTICLES } from '../../data/blogs';
+import { useSiteData } from '../../context/SiteDataContext';
 
 export function BlogPreview() {
-  const latestArticles = BLOG_ARTICLES.slice(0, 3);
+  const { blogs, home } = useSiteData();
+  const blogPreview = home?.blogPreview || {
+    eyebrow: 'Editorial & Career Playbooks',
+    title: 'Insights for your next career move',
+    description: 'Practical essays, architectural deep-dives, and career guides written by our teaching faculty.',
+    buttonText: 'View All Articles',
+  };
+
+  const articleList = blogs && blogs.length > 0 ? blogs : BLOG_ARTICLES;
+  const latestArticles = articleList.slice(0, 3);
 
   return (
     <section className="py-8 lg:py-10 bg-white">
       <Container>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-6">
           <SectionHeading
-            eyebrow="Editorial & Career Playbooks"
-            title="Insights for your next career move"
-            description="Practical essays, architectural deep-dives, and career guides written by our teaching faculty."
+            eyebrow={blogPreview.eyebrow}
+            title={blogPreview.title}
+            description={blogPreview.description}
           />
 
           <div className="shrink-0">
             <Button href="/blog" variant="outline">
-              <span>View All Articles</span>
+              <span>{blogPreview.buttonText || 'View All Articles'}</span>
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>

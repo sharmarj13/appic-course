@@ -7,9 +7,17 @@ import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { WORKSHOPS } from '../../data/workshops';
 import { useActionModal } from '../common/ActionModalContext';
+import { useSiteData } from '../../context/SiteDataContext';
 
 export function Workshops() {
   const { openWorkshopModal } = useActionModal();
+  const { home } = useSiteData();
+  const workshopsContent = home?.workshops || {
+    eyebrow: 'Interactive Cohort Clinics',
+    title: 'Learn live. Ask questions. Build faster.',
+    description: 'Supplement your self-paced modules with live interactive engineering, design, and analytics workshops led by our faculty.',
+    note: 'All live workshops include interactive Q&A, downloadable starter repositories, and session recordings.',
+  };
 
   return (
     <section id="workshops" className="py-8 lg:py-10 bg-slate-950 text-white relative overflow-hidden">
@@ -21,14 +29,14 @@ export function Workshops() {
       <Container className="relative">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6">
           <SectionHeading
-            eyebrow="Interactive Cohort Clinics"
-            title="Learn live. Ask questions. Build faster."
-            description="Supplement your self-paced modules with live interactive engineering, design, and analytics workshops led by our faculty."
+            eyebrow={workshopsContent.eyebrow}
+            title={workshopsContent.title}
+            description={workshopsContent.description}
             dark
           />
 
           <p className="text-xs sm:text-sm text-slate-400 max-w-xs">
-            All live workshops include interactive Q&A, downloadable starter repositories, and session recordings.
+            {workshopsContent.note}
           </p>
         </div>
 

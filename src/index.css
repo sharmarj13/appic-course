@@ -3,6 +3,7 @@
 @layer base {
   :root {
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, Cambria, serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 

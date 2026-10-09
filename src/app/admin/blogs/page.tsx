@@ -225,18 +225,18 @@ export default function AdminBlogsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/90">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-3xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
               Editorial & Publishing
             </span>
-            <span className="text-slate-400 text-xs">• Live Sync with /blog</span>
+            <span className="text-slate-400 text-xs font-medium">• Live Sync with /blog</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
             Blog & Editorial Articles ({blogs.length})
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Write thought leadership essays, tech articles, upload cover artwork, and assign author bylines.
           </p>
         </div>
@@ -244,9 +244,9 @@ export default function AdminBlogsPage() {
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer w-fit"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer w-fit"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4 text-emerald-300" />
           <span>New Article</span>
         </button>
       </div>
@@ -260,7 +260,7 @@ export default function AdminBlogsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by article title, author, or keyword..."
-            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
 
@@ -270,9 +270,9 @@ export default function AdminBlogsPage() {
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-blue-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
               }`}
             >
@@ -286,7 +286,7 @@ export default function AdminBlogsPage() {
       <div className="rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-50/80 border-b border-slate-200 text-3xs font-bold uppercase tracking-wider text-slate-500">
+            <thead className="bg-slate-50/90 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="py-3.5 px-6">Article</th>
                 <th className="py-3.5 px-4">Category</th>
@@ -322,14 +322,14 @@ export default function AdminBlogsPage() {
                               {article.title}
                             </p>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-3xs font-mono font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 truncate">
+                              <span className="text-xs font-mono font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 truncate">
                                 /blog/{article.slug}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => handleCopyBlogUrl(article.slug, article.id)}
                                 title="Copy public article URL"
-                                className="text-3xs text-slate-400 hover:text-purple-600 transition-colors flex items-center gap-1 cursor-pointer"
+                                className="text-xs text-slate-500 hover:text-purple-600 transition-colors flex items-center gap-1 cursor-pointer font-medium"
                               >
                                 {isCopied ? (
                                   <span className="text-emerald-600 font-bold flex items-center gap-0.5">
@@ -347,7 +347,7 @@ export default function AdminBlogsPage() {
                       </td>
 
                     <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="px-2.5 py-1 rounded-full text-3xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
                         {article.category}
                       </span>
                     </td>
@@ -441,7 +441,7 @@ export default function AdminBlogsPage() {
           <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <span className="text-3xs font-mono text-purple-600 uppercase font-bold">
+                <span className="text-xs font-mono text-purple-700 uppercase font-bold tracking-wider">
                   {isCreating ? 'Article Draft' : 'Article Editor'}
                 </span>
                 <h2 className="text-xl font-bold text-slate-900 mt-0.5">
@@ -468,7 +468,7 @@ export default function AdminBlogsPage() {
                     <ImageIcon className="w-4 h-4 text-purple-600" />
                     <span>Article Cover Image</span>
                   </label>
-                  <span className="text-3xs text-slate-500">Live Preview & Presets</span>
+                  <span className="text-xs text-slate-500 font-medium">Live Preview & Presets</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -517,14 +517,14 @@ export default function AdminBlogsPage() {
 
                     {/* Quick 1-Click Presets */}
                     <div>
-                      <p className="text-3xs text-slate-500 mb-1">Or Pick from 3D Artwork Presets:</p>
+                      <p className="text-xs text-slate-500 mb-1 font-medium">Or Pick from 3D Artwork Presets:</p>
                       <div className="flex flex-wrap gap-1.5">
                         {BLOG_IMAGE_PRESETS.map((p) => (
                           <button
                             key={p.label}
                             type="button"
                             onClick={() => setFormBlog({ ...formBlog, imageUrl: p.url })}
-                            className="px-2.5 py-1 rounded-md text-3xs font-medium bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
+                            className="px-2.5 py-1 rounded-md text-xs font-semibold bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
                           >
                             {p.label}
                           </button>
@@ -561,7 +561,7 @@ export default function AdminBlogsPage() {
                     <button
                       type="button"
                       onClick={handleGenerateSlugFromTitle}
-                      className="text-3xs font-bold text-purple-700 hover:text-purple-900 hover:underline cursor-pointer flex items-center gap-1 self-start sm:self-auto"
+                      className="text-xs font-bold text-purple-700 hover:text-purple-900 hover:underline cursor-pointer flex items-center gap-1 self-start sm:self-auto"
                     >
                       <Sparkles className="w-3 h-3 text-purple-600" />
                       <span>Auto-generate from Title</span>
@@ -582,7 +582,7 @@ export default function AdminBlogsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between pt-1 text-3xs text-slate-500">
+                  <div className="flex items-center justify-between pt-1 text-xs text-slate-500">
                     <p>
                       Live Preview:{' '}
                       <span className="font-mono font-bold text-purple-700">
@@ -710,7 +710,7 @@ export default function AdminBlogsPage() {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer"
                 >
                   {isCreating ? 'Publish Article' : 'Save Changes'}
                 </button>

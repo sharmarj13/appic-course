@@ -1,33 +1,38 @@
 "use client";
 import React, { useState } from 'react';
-import { Play, Star } from 'lucide-react';
+import { Play, Star, Sparkles, Building2 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSiteData } from '../../context/SiteDataContext';
 
-const VIDEO_URL = "https://cdn.iraskills.ai/wp-content/uploads/2025/01/4.mp4";
-
 export function Testimonials() {
   const { home } = useSiteData();
   const { reviews } = home;
-  const testimonials = reviews.testimonials || [];
+  const testimonials = reviews?.testimonials || [];
   const [activeIndex, setActiveIndex] = useState(0);
-  const [playingVideo, setPlayingVideo] = useState<number | null>(null);
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
 
   const activeTestimonial = testimonials[activeIndex] || testimonials[0] || {
     id: 't-fallback',
     name: 'Learner',
     role: 'Student',
-    quote: 'Appic Skill helped me transform my technical abilities.',
+    company: 'Appic Alumni',
+    quote: 'Appic Skill helped me transform my technical abilities and master production workflows.',
     initials: 'AS',
+    rating: 5,
   };
 
   const statItems = [
-    { number: reviews.yearsExp, label: 'Years of Experience' },
-    { number: reviews.reviewsCount, label: 'Learner Reviews' },
-    { number: reviews.partnersCount, label: 'Corporate Partners' },
-    { number: reviews.studentsCount, label: 'Students Trained' },
+    { number: reviews.yearsExp || '15+', label: 'Years of Experience' },
+    { number: reviews.reviewsCount || '41K+', label: 'Learner Reviews' },
+    { number: reviews.partnersCount || '300+', label: 'Corporate Partners' },
+    { number: reviews.studentsCount || '5L+', label: 'Students Trained' },
   ];
+
+  // Video testimonials: show all testimonials that have videoUrl, or top 3 testimonials
+  const videoTestimonials = testimonials.filter((t) => Boolean(t.videoUrl)).length > 0
+    ? testimonials.filter((t) => Boolean(t.videoUrl))
+    : testimonials.slice(0, 3);
 
   return (
     <section className="py-16 lg:py-20 bg-slate-50 relative overflow-hidden">
@@ -42,29 +47,44 @@ export function Testimonials() {
           {/* Heading */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             <span className="inline-block py-1.5 px-4 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold tracking-widest uppercase mb-6 w-max">
-              Success Stories
+              {reviews.eyebrow || 'Success Stories'}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold text-slate-900 leading-[1.15] mb-6">
-              Hear from our <br className="hidden lg:block" />
+              {reviews.title || 'Hear from our'}{' '}
+              <br className="hidden lg:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                driven learners.
+                {reviews.titleGradient || 'driven learners.'}
               </span>
             </h2>
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-md">
-              At Appic Skill, we focus on practical outcomes. Discover how our self-paced modules and expert reviews have transformed careers.
+              {reviews.description ||
+                'At Appic Skill, we focus on practical outcomes. Discover how our self-paced modules and expert reviews have transformed careers.'}
             </p>
           </div>
 
           {/* Testimonial Quote Card */}
           <div className="lg:col-span-7">
-            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden h-full">
+            <div className="relative bg-white rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden h-full flex flex-col justify-between">
               <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                 <svg className="w-32 h-32 text-blue-900" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
                   <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                 </svg>
               </div>
-              
-              <div className="relative z-10 flex flex-col h-full justify-between">
+
+              <div>
+                {/* Rating stars if available */}
+                <div className="flex items-center gap-1 text-amber-400 mb-4">
+                  {Array.from({ length: activeTestimonial.rating || 5 }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400" />
+                  ))}
+                  {activeTestimonial.company && (
+                    <span className="ml-3 text-xs font-semibold text-slate-500 flex items-center gap-1">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                      {activeTestimonial.company}
+                    </span>
+                  )}
+                </div>
+
                 <AnimatePresence mode="wait">
                   <motion.p 
                     key={activeTestimonial.id}
@@ -72,100 +92,123 @@ export function Testimonials() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className="text-lg sm:text-xl text-slate-700 leading-relaxed font-serif italic mb-10 min-h-[140px]"
+                    className="text-lg sm:text-xl text-slate-700 leading-relaxed font-serif italic mb-8 min-h-[120px]"
                   >
                     &ldquo;{activeTestimonial.quote}&rdquo;
                   </motion.p>
                 </AnimatePresence>
-
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 border-t border-slate-100 pt-6">
-                  {testimonials.map((test, idx) => {
-                    const isActive = activeIndex === idx;
-                    return (
-                      <button
-                        key={test.id || idx}
-                        onClick={() => setActiveIndex(idx)}
-                        className={`group flex items-center gap-3 p-2 pr-4 rounded-full transition-all duration-300 border ${
-                          isActive ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:border-blue-300'
-                        }`}
-                      >
-                        <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
-                          isActive ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-600'
-                        }`}>
-                          {test.initials}
-                        </div>
-                        {isActive && (
-                          <motion.div 
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: 'auto' }}
-                            className="text-left overflow-hidden whitespace-nowrap"
-                          >
-                            <p className="text-xs font-bold text-slate-900">{test.name}</p>
-                            <p className="text-[10px] text-slate-500 truncate max-w-[100px]">{test.role}</p>
-                          </motion.div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
+
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 border-t border-slate-100 pt-6">
+                {testimonials.map((test, idx) => {
+                  const isActive = activeIndex === idx;
+                  return (
+                    <button
+                      key={test.id || idx}
+                      onClick={() => setActiveIndex(idx)}
+                      className={`group flex items-center gap-3 p-2 pr-4 rounded-full transition-all duration-300 border ${
+                        isActive ? 'bg-blue-50 border-blue-200 shadow-xs' : 'bg-white border-slate-200 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                        isActive ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-600'
+                      }`}>
+                        {test.initials || test.name?.substring(0, 2).toUpperCase() || 'LR'}
+                      </div>
+                      {isActive && (
+                        <motion.div 
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: 'auto' }}
+                          className="text-left overflow-hidden whitespace-nowrap"
+                        >
+                          <p className="text-xs font-bold text-slate-900">{test.name}</p>
+                          <p className="text-[10px] text-slate-500 truncate max-w-[130px]">{test.role}</p>
+                        </motion.div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
             </div>
           </div>
         </div>
 
-        {/* Video Testimonials Inline Player */}
-        <div className="mb-24">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold text-slate-900">Watch their journey</h3>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {[0, 1, 2].map((idx) => (
-              <div 
-                key={idx} 
-                className={`relative w-full aspect-video rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 transition-all duration-500 ${
-                  playingVideo === idx ? 'ring-4 ring-blue-500/50 scale-[1.02] z-20 shadow-2xl' : 'hover:-translate-y-1 hover:shadow-xl z-10'
-                }`}
-              >
-                {playingVideo === idx ? (
-                  <video 
-                    src={VIDEO_URL} 
-                    controls 
-                    autoPlay 
-                    className="w-full h-full object-cover bg-black"
-                    onEnded={() => setPlayingVideo(null)}
+        {/* Video Testimonials Inline Player - 100% Admin Dynamic */}
+        {videoTestimonials.length > 0 && (
+          <div className="mb-24">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-2xl font-bold text-slate-900">
+                {reviews.videoSectionTitle || 'Watch their journey'}
+              </h3>
+              <span className="text-xs font-semibold text-slate-500">
+                {videoTestimonials.length} Verified Student Stories
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {videoTestimonials.map((item) => {
+                const isPlaying = playingVideoId === item.id;
+                const videoSrc = item.videoUrl || "https://cdn.iraskills.ai/wp-content/uploads/2025/01/4.mp4";
+
+                return (
+                  <div 
+                    key={item.id} 
+                    className={`relative w-full aspect-video rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 transition-all duration-500 ${
+                      isPlaying ? 'ring-4 ring-blue-500/50 scale-[1.02] z-20 shadow-2xl' : 'hover:-translate-y-1 hover:shadow-xl z-10'
+                    }`}
                   >
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <>
-                    {/* Placeholder Thumbnail Background */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900" />
-                    
-                    {/* User Info overlay */}
-                    <div className="absolute bottom-5 left-5 right-5 text-white z-10 pointer-events-none">
-                      <p className="text-base font-bold drop-shadow-md">{testimonials[idx]?.name || 'Appic Skill Learner'}</p>
-                      <p className="text-xs text-slate-300 drop-shadow-md">{testimonials[idx]?.role || 'Student'}</p>
-                    </div>
+                    {isPlaying ? (
+                      <video 
+                        src={videoSrc} 
+                        controls 
+                        autoPlay 
+                        className="w-full h-full object-cover bg-black"
+                        onEnded={() => setPlayingVideoId(null)}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <>
+                        {/* Custom Thumbnail or Sleek Gradient */}
+                        {item.videoThumbnail ? (
+                          <img 
+                            src={item.videoThumbnail} 
+                            alt={`${item.name} video testimonial thumbnail`} 
+                            className="absolute inset-0 w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900 to-blue-950" />
+                        )}
+                        
+                        {/* User Info overlay */}
+                        <div className="absolute bottom-5 left-5 right-5 text-white z-10 pointer-events-none">
+                          <p className="text-base font-bold drop-shadow-md">{item.name}</p>
+                          <p className="text-xs text-slate-300 drop-shadow-md">
+                            {item.role} {item.company ? `• ${item.company}` : ''}
+                          </p>
+                        </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-                    {/* Play Button Overlay */}
-                    <button 
-                      onClick={() => setPlayingVideo(idx)}
-                      className="absolute inset-0 flex items-center justify-center group/play w-full h-full bg-black/10 hover:bg-black/20 transition-colors"
-                      aria-label="Play video"
-                    >
-                      <div className="flex items-center justify-center h-16 w-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 group-hover/play:bg-white group-hover/play:text-blue-600 group-hover/play:scale-110 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                        <Play className="h-6 w-6 ml-1" fill="currentColor" />
-                      </div>
-                    </button>
-                  </>
-                )}
-              </div>
-            ))}
+                        {/* Play Button Overlay */}
+                        <button 
+                          onClick={() => setPlayingVideoId(item.id)}
+                          className="absolute inset-0 flex items-center justify-center group/play w-full h-full bg-black/15 hover:bg-black/30 transition-colors cursor-pointer"
+                          aria-label={`Play video testimonial from ${item.name}`}
+                        >
+                          <div className="flex items-center justify-center h-16 w-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 group-hover/play:bg-white group-hover/play:text-blue-600 group-hover/play:scale-110 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                            <Play className="h-6 w-6 ml-1" fill="currentColor" />
+                          </div>
+                        </button>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Premium Stats Section */}
         <div className="relative bg-slate-900 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-12 lg:p-16 overflow-hidden shadow-2xl">
@@ -177,7 +220,7 @@ export function Testimonials() {
             {/* Left: Heading and Google Review */}
             <div className="lg:col-span-5 flex flex-col items-start text-white">
               <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-8">
-                The numbers speak <br className="hidden sm:block" /> for themselves.
+                {reviews.statsTitle || 'The numbers speak for themselves.'}
               </h3>
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors">
@@ -191,7 +234,7 @@ export function Testimonials() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-white font-bold text-lg leading-none">{reviews.ratingScore}</span>
+                    <span className="text-white font-bold text-lg leading-none">{reviews.ratingScore || '4.8'}</span>
                     <div className="flex items-center text-amber-400">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <Star key={s} className="w-4 h-4 fill-amber-400" />
@@ -199,7 +242,7 @@ export function Testimonials() {
                     </div>
                   </div>
                   <div className="text-xs text-slate-300 font-medium tracking-wide">
-                    {reviews.ratingSource}
+                    {reviews.ratingSource || 'Based on 41,000+ Google Reviews'}
                   </div>
                 </div>
               </div>
