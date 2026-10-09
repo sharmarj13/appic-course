@@ -636,48 +636,63 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
   const [legal, setLegal] = useState<LegalContent>(DEFAULT_LEGAL);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from LocalStorage on client mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.settings) setSettings(parsed.settings);
-        if (parsed.home) {
-          setHome({
-            ...DEFAULT_HOME,
-            ...parsed.home,
-            hero: { ...DEFAULT_HOME.hero, ...(parsed.home.hero || {}) },
-            featuredCourses: { ...DEFAULT_HOME.featuredCourses, ...(parsed.home.featuredCourses || {}) },
-            whyAppic: { ...DEFAULT_HOME.whyAppic, ...(parsed.home.whyAppic || {}) },
-            journey: { ...DEFAULT_HOME.journey, ...(parsed.home.journey || {}) },
-            reviews: {
-              ...DEFAULT_HOME.reviews,
-              ...(parsed.home.reviews || {}),
-              testimonials: (parsed.home.reviews?.testimonials && parsed.home.reviews.testimonials.length > 0)
-                ? parsed.home.reviews.testimonials
-                : DEFAULT_HOME.reviews.testimonials,
-            },
-            workshops: { ...DEFAULT_HOME.workshops, ...(parsed.home.workshops || {}) },
-            community: { ...DEFAULT_HOME.community, ...(parsed.home.community || {}) },
-            blogPreview: { ...DEFAULT_HOME.blogPreview, ...(parsed.home.blogPreview || {}) },
-            finalCta: { ...DEFAULT_HOME.finalCta, ...(parsed.home.finalCta || {}) },
-          });
-        }
-        if (parsed.courses) setCourses(parsed.courses);
-        if (parsed.blogs) setBlogs(parsed.blogs);
-        if (parsed.inquiries) setInquiries(parsed.inquiries);
-        if (parsed.faqs) setFaqs(parsed.faqs);
-        if (parsed.helpArticles) setHelpArticles(parsed.helpArticles);
-        if (parsed.legal) setLegal(parsed.legal);
-      }
-    } catch (e) {
-      console.error('Error loading stored site data', e);
-    }
-    setIsLoaded(true);
-  }, []);
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5005/api';
 
-  // Save to LocalStorage whenever data changes (after initial load)
+  // Load from API / PostgreSQL on client mount
+  useEffect(() => {
+    async function loadDataFromDb() {
+      try {
+        // Fetch courses from PostgreSQL
+        const coursesRes = await fetch(`${API_BASE}/courses`);
+        if (coursesRes.ok) {
+          const dbCourses = await coursesRes.json();
+          if (Array.isArray(dbCourses) && dbCourses.length > 0) {
+            setCourses(dbCourses);
+          }
+        }
+
+        // Fetch blogs from PostgreSQL
+        const blogsRes = await fetch(`${API_BASE}/blogs`);
+        if (blogsRes.ok) {
+          const dbBlogs = await blogsRes.json();
+          if (Array.isArray(dbBlogs) && dbBlogs.length > 0) {
+            setBlogs(dbBlogs);
+          }
+        }
+
+        // Fetch inquiries from PostgreSQL
+        const inqRes = await fetch(`${API_BASE}/inquiries`);
+        if (inqRes.ok) {
+          const dbInquiries = await inqRes.json();
+          if (Array.isArray(dbInquiries) && dbInquiries.length > 0) {
+            setInquiries(dbInquiries);
+          }
+        }
+
+        // Fetch settings from PostgreSQL
+        const setRes = await fetch(`${API_BASE}/settings?key=general_settings`);
+        if (setRes.ok) {
+          const dbSettings = await setRes.json();
+          if (dbSettings) setSettings((prev) => ({ ...prev, ...dbSettings }));
+        }
+
+        // Fetch home settings from PostgreSQL
+        const homeRes = await fetch(`${API_BASE}/settings?key=home_settings`);
+        if (homeRes.ok) {
+          const dbHome = await homeRes.json();
+          if (dbHome) setHome((prev) => ({ ...prev, ...dbHome }));
+        }
+      } catch (err) {
+        console.warn('Could not fetch from database API, falling back to local state:', err);
+      } finally {
+        setIsLoaded(true);
+      }
+    }
+
+    loadDataFromDb();
+  }, [API_BASE]);
+
+  // Save to LocalStorage as secondary cache
   useEffect(() => {
     if (!isLoaded) return;
     try {
@@ -697,36 +712,106 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
     }
   }, [settings, home, courses, blogs, inquiries, faqs, helpArticles, legal, isLoaded]);
 
-  const updateSettings = (newSettings: Partial<SiteSettings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
+  const updateSettings = async (newSettings: Partial<SiteSettings>) => {
+    const updated = { ...settings, ...newSettings };
+    setSettings(updated);
+    try {
+      await fetch(`${API_BASE}/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'general_settings', data: updated }),
+      });
+    } catch (err) {
+      console.error('Error saving settings to db', err);
+    }
   };
 
-  const updateHome = (newHome: Partial<HomeContent>) => {
-    setHome((prev) => ({ ...prev, ...newHome }));
+  const updateHome = async (newHome: Partial<HomeContent>) => {
+    const updated = { ...home, ...newHome };
+    setHome(updated);
+    try {
+      await fetch(`${API_BASE}/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'home_settings', data: updated }),
+      });
+    } catch (err) {
+      console.error('Error saving home to db', err);
+    }
   };
 
-  const addCourse = (course: Course) => {
+  const addCourse = async (course: Course) => {
     setCourses((prev) => [course, ...prev]);
+    try {
+      await fetch(`${API_BASE}/courses`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(course),
+      });
+    } catch (err) {
+      console.error('Error creating course in db', err);
+    }
   };
 
-  const updateCourse = (id: string, updated: Partial<Course>) => {
+  const updateCourse = async (id: string, updated: Partial<Course>) => {
     setCourses((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)));
+    try {
+      await fetch(`${API_BASE}/courses/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+    } catch (err) {
+      console.error('Error updating course in db', err);
+    }
   };
 
-  const deleteCourse = (id: string) => {
+  const deleteCourse = async (id: string) => {
     setCourses((prev) => prev.filter((c) => c.id !== id));
+    try {
+      await fetch(`${API_BASE}/courses/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.error('Error deleting course in db', err);
+    }
   };
 
-  const addBlog = (blog: BlogArticle) => {
+  const addBlog = async (blog: BlogArticle) => {
     setBlogs((prev) => [blog, ...prev]);
+    try {
+      await fetch(`${API_BASE}/blogs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(blog),
+      });
+    } catch (err) {
+      console.error('Error creating blog in db', err);
+    }
   };
 
-  const updateBlog = (id: string, updated: Partial<BlogArticle>) => {
+  const updateBlog = async (id: string, updated: Partial<BlogArticle>) => {
     setBlogs((prev) => prev.map((b) => (b.id === id ? { ...b, ...updated } : b)));
+    try {
+      await fetch(`${API_BASE}/blogs/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+    } catch (err) {
+      console.error('Error updating blog in db', err);
+    }
   };
 
-  const deleteBlog = (id: string) => {
+  const deleteBlog = async (id: string) => {
     setBlogs((prev) => prev.filter((b) => b.id !== id));
+    try {
+      await fetch(`${API_BASE}/blogs/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.error('Error deleting blog in db', err);
+    }
   };
 
   const addInquiry = (inquiry: Omit<Inquiry, 'id' | 'createdAt' | 'status'>): string => {
@@ -740,17 +825,46 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
       status: 'New',
     };
     setInquiries((prev) => [newInquiry, ...prev]);
+
+    // Persist to PostgreSQL
+    fetch(`${API_BASE}/inquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: inquiry.fullName,
+        email: inquiry.email,
+        phone: inquiry.phone,
+        message: `${inquiry.topic ? `[${inquiry.topic}] ` : ''}${inquiry.message}`,
+      }),
+    }).catch((err) => console.error('Error saving inquiry to db', err));
+
     return id;
   };
 
-  const updateInquiryStatus = (id: string, status: Inquiry['status']) => {
+  const updateInquiryStatus = async (id: string, status: Inquiry['status']) => {
     setInquiries((prev) =>
       prev.map((inq) => (inq.id === id ? { ...inq, status } : inq))
     );
+    try {
+      await fetch(`${API_BASE}/inquiries/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+    } catch (err) {
+      console.error('Error updating inquiry status in db', err);
+    }
   };
 
-  const deleteInquiry = (id: string) => {
+  const deleteInquiry = async (id: string) => {
     setInquiries((prev) => prev.filter((inq) => inq.id !== id));
+    try {
+      await fetch(`${API_BASE}/inquiries/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.error('Error deleting inquiry in db', err);
+    }
   };
 
   const addFaq = (faq: Omit<FaqItem, 'id'>) => {

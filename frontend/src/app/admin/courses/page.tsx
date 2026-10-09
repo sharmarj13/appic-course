@@ -239,13 +239,19 @@ export default function AdminCoursesPage() {
   };
 
   const filteredCourses = courses.filter((c) => {
+    if (!c) return false;
     const matchesCategory =
       selectedCategory === 'All' || c.category === selectedCategory;
+    const title = c.title || '';
+    const subtitle = c.subtitle || '';
+    const slug = c.slug || '';
+    const instructorName = (c.instructor as any)?.name || '';
+
     const matchesSearch =
-      c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.instructor.name.toLowerCase().includes(searchQuery.toLowerCase());
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      instructorName.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 

@@ -112,14 +112,14 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
           {/* Instructor metadata line */}
           <div className="mt-4 flex items-center gap-3 text-xs">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200">
-              {course.instructor.initials}
+              {(course.instructor as any)?.initials || (course.instructor as any)?.name?.substring(0, 2).toUpperCase() || 'IN'}
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-slate-900">
-                {course.instructor.name}
+                {(course.instructor as any)?.name || 'Course Instructor'}
               </span>
               <span className="text-slate-500 text-[10px] uppercase tracking-wide">
-                {course.instructor.role}
+                {(course.instructor as any)?.role || 'Industry Mentor'}
               </span>
             </div>
           </div>
@@ -131,11 +131,13 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
         <div className="flex flex-col">
           <div className="flex items-baseline gap-2 tabular-nums">
             <span className="text-lg font-bold text-slate-900">
-              {formatCurrency(course.price)}
+              {formatCurrency(Number(course.price) || 0)}
             </span>
-            <span className="text-xs text-slate-400 line-through">
-              {formatCurrency(course.originalPrice)}
-            </span>
+            {course.originalPrice ? (
+              <span className="text-xs text-slate-400 line-through">
+                {formatCurrency(Number(course.originalPrice))}
+              </span>
+            ) : null}
           </div>
         </div>
 

@@ -22,12 +22,18 @@ export default function CoursesPage() {
     const query = searchQuery.trim().toLowerCase();
 
     const filtered = courses.filter((course) => {
+      if (!course) return false;
+      const title = course.title || '';
+      const shortDesc = course.shortDescription || '';
+      const category = course.category || '';
+      const instructorName = (course.instructor as any)?.name || '';
+
       const matchesSearch =
         !query ||
-        course.title.toLowerCase().includes(query) ||
-        course.shortDescription.toLowerCase().includes(query) ||
-        course.category.toLowerCase().includes(query) ||
-        course.instructor.name.toLowerCase().includes(query);
+        title.toLowerCase().includes(query) ||
+        shortDesc.toLowerCase().includes(query) ||
+        category.toLowerCase().includes(query) ||
+        instructorName.toLowerCase().includes(query);
 
       const matchesCategory =
         selectedCategory === 'All' || course.category === selectedCategory;
@@ -36,12 +42,13 @@ export default function CoursesPage() {
         selectedLevel === 'All' || course.level === selectedLevel;
 
       let matchesPrice = true;
+      const price = Number(course.price) || 0;
       if (selectedPrice === 'Under ₹200') {
-        matchesPrice = course.price < 200;
+        matchesPrice = price < 200;
       } else if (selectedPrice === '₹200 - ₹250') {
-        matchesPrice = course.price >= 200 && course.price <= 250;
+        matchesPrice = price >= 200 && price <= 250;
       } else if (selectedPrice === 'Over ₹250') {
-        matchesPrice = course.price > 250;
+        matchesPrice = price > 250;
       }
 
       return matchesSearch && matchesCategory && matchesLevel && matchesPrice;

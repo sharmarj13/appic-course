@@ -1,0 +1,124 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Course {
+  id               String   @id @default(uuid())
+  slug             String   @unique
+  title            String
+  subtitle         String   @default("")
+  shortDescription String
+  fullDescription  String
+  category         String
+  level            String
+  duration         String
+  totalHours       Float    @default(0)
+  projectsCount    Int      @default(0)
+  rating           Float    @default(5.0)
+  reviewsCount     Int      @default(0)
+  studentsCount    Int      @default(0)
+  price            Float
+  originalPrice    Float
+  discountPercent  Float    @default(0)
+  imageUrl         String?
+  visualAccent     String   @default("blue")
+  instructor       Json     // { name, role, companyContext, bio, initials, experienceYears, studentsTaught }
+  whatYouWillLearn Json     // string[]
+  prerequisites    Json     // string[]
+  curriculum       Json     // CurriculumModule[]
+  reviews          Json     // CourseReview[]
+  faqs             Json     // CourseFAQItem[]
+  featured         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model BlogArticle {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  category    String
+  publishedAt String
+  readingTime String
+  featured    Boolean  @default(false)
+  imageUrl    String?
+  visualTheme String   @default("navy")
+  author      Json     // { name, role, initials, bio }
+  sections    Json     // BlogSection[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Workshop {
+  id                 String   @id @default(uuid())
+  title              String
+  topic              String
+  category           String
+  date               String
+  time               String
+  duration           String
+  instructorName     String
+  instructorRole     String
+  instructorInitials String
+  seatsTotal         Int      @default(50)
+  seatsRemaining     Int      @default(50)
+  keyTakeaways       Json     // string[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Inquiry {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  courseId  String?
+  courseName String?
+  message   String
+  status    String   @default("NEW") // NEW, CONTACTED, ENROLLED, CLOSED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id        String   @id @default(uuid())
+  category  String
+  question  String
+  answer    String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HelpArticle {
+  id        String   @id @default(uuid())
+  category  String
+  title     String
+  answer    String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  key       String   @id // e.g. "general_settings", "home_settings", "privacy_policy", "terms_of_service"
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -1,20 +1,44 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Appic Skill & Courses Platform
 
-# Run and deploy your AI Studio app
+Full-Stack Course & Workshop Platform built with Next.js (Frontend), Express.js (Backend), Prisma ORM, and Supabase PostgreSQL.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/d7d932dd-a530-4e06-9239-63c2dfee55db
+## 📁 Repository Structure
 
-## Run Locally
+```
+├── backend/          # Express.js REST API, Prisma ORM, Supabase Database
+└── frontend/         # Next.js App, Public Catalog, Admin Dashboard & CMS
+```
 
-**Prerequisites:**  Node.js
+---
 
+## 🚀 Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 1. Backend Setup (Express & PostgreSQL)
+```bash
+cd backend
+npm install
+npm run dev
+```
+- Server running at: **http://localhost:5005**
+- Health Check: **http://localhost:5005/api/health**
+
+### 2. Frontend Setup (Next.js)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- Web Application: **http://localhost:3005**
+- Admin Panel: **http://localhost:3005/admin**
+
+---
+
+## 🗄️ Database Management
+In the `backend` directory:
+```bash
+npm run db:push    # Push schema changes to Supabase
+npm run db:seed    # Seed all courses and workshops
+npm run db:studio  # Open Prisma Studio GUI
+```

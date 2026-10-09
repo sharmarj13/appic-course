@@ -1,12 +1,32 @@
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js & Build outputs
 .next/
 out/
 build/
 dist/
-coverage/
-.DS_Store
+tsconfig.tsbuildinfo
+
+# Environment & credentials (Protect Supabase and DB keys)
+.env
+.env*.local
+.env.production
+.env.development
+
+# Old workspace folder
+appic-course/
+
+# Uploads & logs
+uploads/
 *.log
-.env*
-!.env.example
-scratch-fix*.js
-add-use-client.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.pem
