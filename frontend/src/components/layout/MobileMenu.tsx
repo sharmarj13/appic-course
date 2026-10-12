@@ -6,6 +6,7 @@ import { usePathname as useLocation } from 'next/navigation';
 import { X, ArrowRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Button } from '../common/Button';
+import { useSiteData } from '../../context/SiteDataContext';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
 ];
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { settings } = useSiteData();
   const location = useLocation();
 
   return (
@@ -51,7 +53,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   onClick={onClose}
                   className="text-lg font-bold tracking-tight text-slate-900"
                 >
-                  Appic Skill
+                  {settings.siteName}
                 </Link>
                 <button
                   type="button"

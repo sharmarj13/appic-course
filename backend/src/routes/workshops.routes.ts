@@ -41,4 +41,44 @@ router.post('/', async (req, res) => {
   }
 });
 
+// PUT /api/workshops/:id
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const workshop = await prisma.workshop.update({
+      where: { id },
+      data: {
+        ...(body.title !== undefined && { title: body.title }),
+        ...(body.topic !== undefined && { topic: body.topic }),
+        ...(body.category !== undefined && { category: body.category }),
+        ...(body.date !== undefined && { date: body.date }),
+        ...(body.time !== undefined && { time: body.time }),
+        ...(body.duration !== undefined && { duration: body.duration }),
+        ...(body.instructorName !== undefined && { instructorName: body.instructorName }),
+        ...(body.instructorRole !== undefined && { instructorRole: body.instructorRole }),
+        ...(body.instructorInitials !== undefined && { instructorInitials: body.instructorInitials }),
+        ...(body.seatsTotal !== undefined && { seatsTotal: Number(body.seatsTotal) }),
+        ...(body.seatsRemaining !== undefined && { seatsRemaining: Number(body.seatsRemaining) }),
+        ...(body.keyTakeaways !== undefined && { keyTakeaways: body.keyTakeaways }),
+      },
+    });
+    res.json(workshop);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to update workshop' });
+  }
+});
+
+// DELETE /api/workshops/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.workshop.delete({ where: { id } });
+    res.json({ success: true, message: 'Workshop deleted successfully' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to delete workshop' });
+  }
+});
+
 export default router;
+

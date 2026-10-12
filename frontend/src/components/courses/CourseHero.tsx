@@ -5,12 +5,15 @@ import { Download, ChevronRight, FileText, Globe, Clock, CheckCircle2 } from 'lu
 import { Course } from '../../types/course';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
+import { useSiteData } from '../../context/SiteDataContext';
+import { getCleanWhatsApp } from '../../lib/utils';
 
 interface CourseHeroProps {
   course: Course;
 }
 
 export function CourseHero({ course }: CourseHeroProps) {
+  const { settings } = useSiteData();
   return (
     <section className="bg-slate-50 pt-8 pb-20 relative">
       <Container>
@@ -38,14 +41,14 @@ export function CourseHero({ course }: CourseHeroProps) {
                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><FileText className="w-4 h-4"/></div>
                  <div>
                    <p className="text-[10px] text-slate-500 font-bold uppercase">Course Type</p>
-                   <p className="text-sm font-semibold text-slate-900">Self-Paced</p>
+                   <p className="text-sm font-semibold text-slate-900">{course.courseType || 'Self-Paced'}</p>
                  </div>
               </div>
               <div className="flex items-center gap-2">
                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><Globe className="w-4 h-4"/></div>
                  <div>
                    <p className="text-[10px] text-slate-500 font-bold uppercase">Language</p>
-                   <p className="text-sm font-semibold text-slate-900">English</p>
+                   <p className="text-sm font-semibold text-slate-900">{course.language || 'English'}</p>
                  </div>
               </div>
               <div className="flex items-center gap-2">
@@ -58,7 +61,13 @@ export function CourseHero({ course }: CourseHeroProps) {
             </div>
 
             <div>
-              <Button variant="primary" size="lg" className="rounded-md">
+              <Button
+                variant="primary"
+                size="lg"
+                className="rounded-md"
+                href={course.brochureUrl || `https://wa.me/${getCleanWhatsApp(settings?.whatsappNumber)}?text=Please%20send%20me%20the%20brochure%20for%20${encodeURIComponent(course.title)}`}
+                target={course.brochureUrl ? '_blank' : undefined}
+              >
                 Download Brochure <Download className="w-4 h-4 ml-2" />
               </Button>
             </div>

@@ -522,17 +522,17 @@ export default function ContactPage() {
                         <div>
                           <p className="text-xs font-semibold text-slate-500">Academic & Admissions Email</p>
                           <a
-                            href="mailto:support@appicskill.edu"
+                            href={`mailto:${settings.supportEmail || 'support@appicskill.edu'}`}
                             className="font-semibold text-slate-900 hover:text-blue-600 transition-colors block"
                           >
-                            support@appicskill.edu
+                            {settings.supportEmail || 'support@appicskill.edu'}
                           </a>
-                          <p className="text-xs text-slate-500">admissions@appicskill.edu</p>
+                          <p className="text-xs text-slate-500">{settings.admissionsEmail || 'admissions@appicskill.edu'}</p>
                         </div>
                       </div>
                       <button
                         type="button"
-                        onClick={() => copyToClipboard('support@appicskill.edu')}
+                        onClick={() => copyToClipboard(settings.supportEmail || 'support@appicskill.edu')}
                         title="Copy email address"
                         className="rounded-lg p-1.5 text-slate-400 hover:bg-white hover:text-slate-800 transition-colors cursor-pointer border border-transparent hover:border-slate-200"
                       >
@@ -554,12 +554,12 @@ export default function ContactPage() {
                       <div>
                         <p className="text-xs font-semibold text-slate-500">Advisory Helpline</p>
                         <a
-                          href="tel:+14158904320"
+                          href={`tel:${settings.phone || '+91 98873 54080'}`}
                           className="font-semibold text-slate-900 hover:text-blue-600 transition-colors block tabular-nums"
                         >
-                          +1 (415) 890-4320
+                          {settings.phone || '+91 98873 54080'}
                         </a>
-                        <p className="text-xs text-slate-500">Mon–Fri · 8:00 AM – 7:00 PM EST</p>
+                        <p className="text-xs text-slate-500">{settings.hoursWeekdays || 'Mon–Fri · 8:00 AM – 7:00 PM'}</p>
                       </div>
                     </div>
                   </div>
@@ -573,10 +573,10 @@ export default function ContactPage() {
                       <div>
                         <p className="text-xs font-semibold text-slate-500">Main Studio & HQ</p>
                         <p className="font-semibold text-slate-900">
-                          548 Market Street, Suite 420
+                          {settings.address || '548 Market Street, Suite 420, San Francisco, CA'}
                         </p>
                         <p className="text-xs text-slate-500">
-                          San Francisco, CA 94104 (Remote-First Global Faculty)
+                          Remote-First Global Faculty & Online Campuses
                         </p>
                       </div>
                     </div>
@@ -591,13 +591,14 @@ export default function ContactPage() {
                       <div>
                         <p className="text-xs font-semibold text-slate-500">Advisory Schedule</p>
                         <p className="font-semibold text-slate-900">
-                          Mon – Fri: 8:00 AM – 7:00 PM EST
+                          {settings.hoursWeekdays || 'Mon – Fri: 8:00 AM – 7:00 PM EST'}
                         </p>
                         <p className="text-xs text-slate-500">
-                          Sat: 9:00 AM – 2:00 PM EST (Live Clinics Desk)
+                          {settings.hoursWeekends || 'Sat: 9:00 AM – 2:00 PM EST (Live Clinics Desk)'}
                         </p>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -626,7 +627,7 @@ export default function ContactPage() {
 
                 <div className="pt-2">
                   <a
-                    href="mailto:support@appicskill.edu?subject=Request%201-on-1%20Mentor%20Advisory%20Call"
+                    href={`mailto:${settings.supportEmail || 'support@appicskill.edu'}?subject=Request%201-on-1%20Mentor%20Advisory%20Call`}
                     className="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-colors shadow-sm"
                   >
                     <span>Request Discovery Call</span>
@@ -701,10 +702,10 @@ export default function ContactPage() {
               <p className="text-xs text-slate-600">
                 Drop us a line directly at{' '}
                 <a
-                  href="mailto:support@appicskill.edu"
+                  href={`mailto:${settings.supportEmail || 'support@appicskill.edu'}`}
                   className="font-semibold text-blue-600 hover:underline"
                 >
-                  support@appicskill.edu
+                  {settings.supportEmail || 'support@appicskill.edu'}
                 </a>{' '}
                 or reach out through the form above.
               </p>

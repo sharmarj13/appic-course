@@ -86,7 +86,7 @@ export default function AdminInquiriesPage() {
       {/* Page Header */}
       <div className="pb-6 border-b border-slate-200/90">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
             Admissions & Student Advisory
           </span>
           <span className="text-slate-400 text-xs font-medium">• Real-time Sync</span>
@@ -159,7 +159,7 @@ export default function AdminInquiriesPage() {
               onClick={() => setStatusFilter(st)}
               className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                 statusFilter === st
-                  ? 'bg-slate-900 text-white shadow-xs font-semibold'
+                  ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
               }`}
             >
@@ -257,7 +257,7 @@ export default function AdminInquiriesPage() {
 
       {/* Detailed Lead Drawer / Modal */}
       {activeInquiry && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <div>
@@ -397,7 +397,7 @@ export default function AdminInquiriesPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Inquiry Lead?</h3>
             <p className="text-xs text-slate-600 mb-6">

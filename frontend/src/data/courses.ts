@@ -149,6 +149,39 @@ export const COURSES: Course[] = [
         answer: 'Upon completing all 5 modules and passing the final capstone review, you receive a verifiable Appic Skill credential with a unique portfolio URL.',
       },
     ],
+    courseType: 'Live Interactive & Hands-On Labs',
+    language: 'English & Hindi',
+    placements: [
+      { id: 'p1-1', name: 'Rahul Sharma', role: 'Full Stack Engineer', company: 'Google', package: '40 LAKHS' },
+      { id: 'p1-2', name: 'Priya Patel', role: 'Frontend Architect', company: 'Amazon', package: '25 LAKHS' },
+      { id: 'p1-3', name: 'Amit Singh', role: 'Software Engineer', company: 'Microsoft', package: '18.5 LAKHS' },
+      { id: 'p1-4', name: 'Neha Gupta', role: 'Cloud Platform Eng.', company: 'Meta', package: '45 LAKHS' },
+    ],
+    toolsCovered: ['TypeScript', 'React & Next.js', 'Node.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Git'],
+    futureScope: {
+      title: 'Future Scope in Full Stack Web Development',
+      stats: [
+        { value: '85,000+', label: 'Active Web Engineering Openings' },
+        { value: '1,40,000+', label: 'New Roles by 2027' },
+        { value: '34% YoY', label: 'Cloud & Full Stack Demand Growth' },
+        { value: 'Top 2', label: 'Highest Hired Software Engineering Skill' },
+      ],
+    },
+    certificateInfo: {
+      title: 'Get (ISO) Certified in Full Stack Web Engineering',
+      shareableText: 'Shareable on LinkedIn, GitHub & More',
+      certificateType: 'ADVANCE CERTIFICATION',
+      highlights: [
+        'The certification validates your full stack architectural capabilities and hands-on production code.',
+        'Present the ISO 9001:2015 verified credential to top software product companies.',
+      ],
+    },
+    programFeatures: [
+      '94 Hours of Practical Hands-On Coding',
+      '100% Placement & Interview Support',
+      'ISO 9001:2015 Certified Academy Credentials',
+      'Industry Recognized Certificate & Portfolio',
+    ],
   },
   {
     id: 'course-2',
@@ -276,6 +309,39 @@ export const COURSES: Course[] = [
         answer: 'You will complete 5 structured projects, culminating in two deep-dive case studies that document user research, iterations, design system tokens, and business outcomes.',
       },
     ],
+    courseType: 'Studio Mentorship & Portfolio Labs',
+    language: 'English',
+    placements: [
+      { id: 'p2-1', name: 'Ananya Roy', role: 'Product Designer', company: 'Uber', package: '26 LAKHS' },
+      { id: 'p2-2', name: 'Rohit Verma', role: 'UI/UX Lead', company: 'Flipkart', package: '22 LAKHS' },
+      { id: 'p2-3', name: 'Simran Kaur', role: 'Design Systems Lead', company: 'CRED', package: '32 LAKHS' },
+      { id: 'p2-4', name: 'Tanmay Joshi', role: 'Interaction Designer', company: 'Swiggy', package: '19.5 LAKHS' },
+    ],
+    toolsCovered: ['Figma', 'FigJam', 'Adobe XD', 'Protopie', 'Miro', 'Spline 3D', 'Notion', 'Maze'],
+    futureScope: {
+      title: 'Future Scope in UI/UX & Product Design',
+      stats: [
+        { value: '42,000+', label: 'Active UX Design Openings' },
+        { value: '95,000+', label: 'Design Roles by 2027' },
+        { value: '28% YoY', label: 'Product Design Hiring Surge' },
+        { value: 'Top 5', label: 'Most In-Demand Creative Tech Skill' },
+      ],
+    },
+    certificateInfo: {
+      title: 'Get (ISO) Certified in UI/UX & Product Design',
+      shareableText: 'Shareable on LinkedIn, Behance & Dribbble',
+      certificateType: 'ADVANCE CERTIFICATION',
+      highlights: [
+        'The certification validates your user research, design token architecture, and high-fidelity prototyping skills.',
+        'Showcase the ISO 9001:2015 verified credential to global design agencies and product companies.',
+      ],
+    },
+    programFeatures: [
+      '72 Hours of Portfolio Mentorship & Labs',
+      '100% Placement & Portfolio Review Support',
+      'ISO 9001:2015 Certified Academy Credentials',
+      'Industry Recognized Certificate & Case Studies',
+    ],
   },
   {
     id: 'course-3',
@@ -402,6 +468,39 @@ export const COURSES: Course[] = [
         question: 'How mathematical is this programme?',
         answer: 'We teach the essential linear algebra and probability intuition needed to debug model convergence and understand loss functions, always pairing math directly with clean Python code.',
       },
+    ],
+    courseType: 'Live Applied Research & Cloud GPU Labs',
+    language: 'English',
+    placements: [
+      { id: 'p3-1', name: 'Saurav Mehta', role: 'Machine Learning Engineer', company: 'Google', package: '42 LAKHS' },
+      { id: 'p3-2', name: 'Ritu Sen', role: 'AI Research Engineer', company: 'Adobe', package: '34 LAKHS' },
+      { id: 'p3-3', name: 'Kevin George', role: 'LLM Systems Architect', company: 'Nvidia', package: '52 LAKHS' },
+      { id: 'p3-4', name: 'Pooja Nair', role: 'Applied Data Scientist', company: 'Microsoft', package: '38 LAKHS' },
+    ],
+    toolsCovered: ['Python', 'PyTorch', 'TensorFlow', 'Scikit-Learn', 'LangChain', 'Hugging Face', 'SQL', 'FastAPI'],
+    futureScope: {
+      title: 'Future Scope in AI & Machine Learning Engineering',
+      stats: [
+        { value: '95,000+', label: 'Active Data & AI Openings' },
+        { value: '2,10,000+', label: 'AI & Analytics Roles by 2027' },
+        { value: '45% YoY', label: 'Exponential AI Industry Growth' },
+        { value: 'Top 1', label: 'Fastest Growing Tech Specialization' },
+      ],
+    },
+    certificateInfo: {
+      title: 'Get (ISO) Certified in AI & Machine Learning Engineering',
+      shareableText: 'Shareable on LinkedIn, Kaggle & Hugging Face',
+      certificateType: 'ADVANCE CERTIFICATION',
+      highlights: [
+        'The certification validates your neural network engineering, LLM deployment, and applied machine learning models.',
+        'Showcase the ISO 9001:2015 verified credential to global AI research and engineering firms.',
+      ],
+    },
+    programFeatures: [
+      '108 Hours of Applied PyTorch & AI Labs',
+      '100% Placement & Systems Evaluation Support',
+      'ISO 9001:2015 Certified Academy Credentials',
+      'Industry Recognized Certificate & Models',
     ],
   },
   {

@@ -1,36 +1,55 @@
 import { Router } from 'express';
 import { prisma } from '../lib/prisma.js';
-import { z } from 'zod';
 
 const router = Router();
 
-const CourseSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  slug: z.string().optional(),
-  subtitle: z.string().optional().default(''),
-  shortDescription: z.string().optional().default(''),
-  fullDescription: z.string().optional().default(''),
-  category: z.string().default('Development'),
-  level: z.string().default('Beginner'),
-  duration: z.string().default('12 Weeks'),
-  totalHours: z.coerce.number().default(0),
-  projectsCount: z.coerce.number().default(0),
-  rating: z.coerce.number().default(5.0),
-  reviewsCount: z.coerce.number().default(0),
-  studentsCount: z.coerce.number().default(0),
-  price: z.coerce.number().min(0, 'Price cannot be negative').default(0),
-  originalPrice: z.coerce.number().default(0),
-  discountPercent: z.coerce.number().default(0),
-  imageUrl: z.string().nullable().optional(),
-  visualAccent: z.string().default('blue'),
-  instructor: z.any().optional(),
-  whatYouWillLearn: z.any().optional(),
-  prerequisites: z.any().optional(),
-  curriculum: z.any().optional(),
-  reviews: z.any().optional(),
-  faqs: z.any().optional(),
-  featured: z.boolean().default(false),
-});
+function validateCourse(body: any) {
+  if (!body.title || typeof body.title !== 'string' || body.title.trim().length === 0) {
+    throw new Error('Title is required');
+  }
+  const price = Number(body.price) || 0;
+  if (price < 0) {
+    throw new Error('Price cannot be negative');
+  }
+
+  return {
+    title: String(body.title).trim(),
+    slug: body.slug ? String(body.slug).trim() : undefined,
+    subtitle: String(body.subtitle || ''),
+    shortDescription: String(body.shortDescription || ''),
+    fullDescription: String(body.fullDescription || ''),
+    category: String(body.category || 'Development'),
+    level: String(body.level || 'Beginner'),
+    duration: String(body.duration || '12 Weeks'),
+    totalHours: Number(body.totalHours) || 0,
+    projectsCount: Number(body.projectsCount) || 0,
+    rating: Number(body.rating) || 5.0,
+    reviewsCount: Number(body.reviewsCount) || 0,
+    studentsCount: Number(body.studentsCount) || 0,
+    price: price,
+    originalPrice: Number(body.originalPrice) || price,
+    discountPercent: Number(body.discountPercent) || 0,
+    imageUrl: body.imageUrl || null,
+    visualAccent: String(body.visualAccent || 'blue'),
+    instructor: body.instructor || {},
+    trainers: body.trainers || [],
+    whatYouWillLearn: body.whatYouWillLearn || [],
+    prerequisites: body.prerequisites || [],
+    curriculum: body.curriculum || [],
+    reviews: body.reviews || [],
+    faqs: body.faqs || [],
+    trainingOffered: body.trainingOffered || null,
+    placements: body.placements || [],
+    toolsCovered: body.toolsCovered || [],
+    futureScope: body.futureScope || null,
+    certificateInfo: body.certificateInfo || null,
+    programFeatures: body.programFeatures || [],
+    courseType: body.courseType || 'Self-Paced',
+    language: body.language || 'English',
+    brochureUrl: body.brochureUrl || null,
+    featured: Boolean(body.featured),
+  };
+}
 
 // GET /api/courses
 router.get('/', async (req, res) => {
@@ -92,7 +111,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/courses
 router.post('/', async (req, res) => {
   try {
-    const validated = CourseSchema.parse(req.body);
+    const validated = validateCourse(req.body);
     const slug =
       validated.slug ||
       validated.title
@@ -126,16 +145,22 @@ router.post('/', async (req, res) => {
         curriculum: validated.curriculum || [],
         reviews: validated.reviews || [],
         faqs: validated.faqs || [],
+        trainingOffered: validated.trainingOffered || null,
+        placements: validated.placements || [],
+        toolsCovered: validated.toolsCovered || [],
+        futureScope: validated.futureScope || null,
+        certificateInfo: validated.certificateInfo || null,
+        programFeatures: validated.programFeatures || [],
+        courseType: validated.courseType || 'Self-Paced',
+        language: validated.language || 'English',
+        brochureUrl: validated.brochureUrl || null,
         featured: validated.featured,
       },
     });
 
     res.status(201).json(course);
   } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.issues[0]?.message || 'Validation error' });
-    }
-    res.status(500).json({ error: error.message || 'Failed to create course' });
+    res.status(400).json({ error: error.message || 'Failed to create course' });
   }
 });
 

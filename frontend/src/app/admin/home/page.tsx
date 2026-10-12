@@ -30,6 +30,8 @@ import {
   HomeStage,
   HomePillar
 } from '../../../context/SiteDataContext';
+import { Workshop } from '../../../types/course';
+import { WORKSHOPS } from '../../../data/workshops';
 import Link from 'next/link';
 
 type TabType =
@@ -133,7 +135,7 @@ export default function AdminHomePageEditor() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/90">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
               Content Architecture Engine
             </span>
             <span className="text-slate-400 text-xs font-medium">• Real-Time Site Synchronization</span>
@@ -150,20 +152,20 @@ export default function AdminHomePageEditor() {
           <Link
             href="/"
             target="_blank"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs sm:text-sm font-semibold hover:bg-emerald-50/60 hover:text-emerald-950 hover:border-emerald-200 transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs sm:text-sm font-semibold hover:bg-blue-50/60 hover:text-blue-700 hover:border-blue-200 transition-colors shadow-xs"
           >
-            <ExternalLink className="h-4 w-4 text-emerald-700" />
+            <ExternalLink className="h-4 w-4 text-blue-600" />
             <span>Preview Live Site</span>
           </Link>
 
           <button
             type="button"
             onClick={() => handleSave()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 transition-all cursor-pointer"
           >
             {saved ? (
               <>
-                <Check className="h-4 w-4 text-emerald-300" />
+                <Check className="h-4 w-4 text-blue-100" />
                 <span>Changes Saved!</span>
               </>
             ) : (
@@ -176,7 +178,7 @@ export default function AdminHomePageEditor() {
         </div>
       </div>
 
-      {/* Section Tabs (Classic Segmented Control with Emerald Accents) */}
+      {/* Section Tabs */}
       <div className="flex flex-wrap gap-1.5 p-1.5 rounded-2xl bg-slate-100/90 border border-slate-200/90 shadow-2xs">
         {[
           { id: 'hero', label: '1. Hero Header' },
@@ -195,8 +197,8 @@ export default function AdminHomePageEditor() {
             onClick={() => setActiveTab(tab.id as TabType)}
             className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeTab === tab.id
-                ? 'bg-gradient-to-r from-emerald-950 to-emerald-900 text-white shadow-xs border border-emerald-800/80'
-                : 'text-slate-600 hover:text-emerald-950 hover:bg-white/90'
+                ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20 font-bold'
+                : 'text-slate-600 hover:text-blue-600 hover:bg-white/90'
             }`}
           >
             {tab.label}
@@ -822,9 +824,9 @@ export default function AdminHomePageEditor() {
                 <button
                   type="button"
                   onClick={handleAddTestimonial}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer self-start sm:self-auto"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold transition-all shadow-sm shadow-blue-500/25 border border-blue-500/40 cursor-pointer self-start sm:self-auto"
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-4 w-4 text-blue-100" />
                   <span>Add New Testimonial</span>
                 </button>
               </div>
@@ -1321,8 +1323,295 @@ export default function AdminHomePageEditor() {
                 className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
               />
             </div>
+
+            {/* Dynamic Workshop Cards Editor */}
+            <div className="pt-6 border-t border-slate-100 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>Live Workshop Cards ({(formData.workshops?.items || WORKSHOPS).length} Live)</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Manage the interactive workshop cards displayed on the home page.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = formData.workshops?.items || WORKSHOPS;
+                      const newWs: Workshop = {
+                        id: `ws-${Date.now()}`,
+                        title: 'New Live Masterclass & Practical Clinic',
+                        topic: 'Hands-on session covering cutting-edge patterns and architecture fundamentals.',
+                        category: 'Development',
+                        date: 'Nov 15, 2026',
+                        time: '11:00 AM EST',
+                        duration: '90 Mins · Live Lab',
+                        instructorName: 'Senior Instructor',
+                        instructorRole: 'Staff Engineer',
+                        instructorInitials: 'SI',
+                        seatsTotal: 100,
+                        seatsRemaining: 25,
+                        keyTakeaways: [
+                          'Master production-grade engineering principles',
+                          'Interactive code review & architecture Q&A',
+                          'Downloadable starter repositories and slides',
+                        ],
+                      };
+                      setFormData({
+                        ...formData,
+                        workshops: {
+                          ...(formData.workshops || {
+                            eyebrow: '',
+                            title: '',
+                            description: '',
+                            note: '',
+                          }),
+                          items: [newWs, ...current],
+                        },
+                      });
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Workshop</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        workshops: {
+                          ...(formData.workshops || {
+                            eyebrow: '',
+                            title: '',
+                            description: '',
+                            note: '',
+                          }),
+                          items: WORKSHOPS,
+                        },
+                      });
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer"
+                  >
+                    <span>Load Default 3 Workshops</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {(formData.workshops?.items || WORKSHOPS).map((ws, wsIdx) => {
+                  const itemsList = formData.workshops?.items || WORKSHOPS;
+                  const updateWs = (fields: Partial<Workshop>) => {
+                    const next = [...itemsList];
+                    next[wsIdx] = { ...next[wsIdx], ...fields };
+                    setFormData({
+                      ...formData,
+                      workshops: {
+                        ...(formData.workshops || {
+                          eyebrow: '',
+                          title: '',
+                          description: '',
+                          note: '',
+                        }),
+                        items: next,
+                      },
+                    });
+                  };
+
+                  const deleteWs = () => {
+                    const next = itemsList.filter((_, i) => i !== wsIdx);
+                    setFormData({
+                      ...formData,
+                      workshops: {
+                        ...(formData.workshops || {
+                          eyebrow: '',
+                          title: '',
+                          description: '',
+                          note: '',
+                        }),
+                        items: next,
+                      },
+                    });
+                  };
+
+                  return (
+                    <div
+                      key={ws.id || wsIdx}
+                      className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 sm:p-5 space-y-4 transition hover:border-slate-300"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">
+                            {wsIdx + 1}
+                          </span>
+                          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            {ws.category} · {ws.date}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={deleteWs}
+                          className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 hover:text-rose-700 transition cursor-pointer"
+                          title="Delete Workshop"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Workshop Title
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.title}
+                            onChange={(e) => updateWs({ title: e.target.value })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Category
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.category}
+                            onChange={(e) => updateWs({ category: e.target.value as any })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-2xs font-bold text-slate-600 mb-1">
+                          Topic / Overview
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={ws.topic}
+                          onChange={(e) => updateWs({ topic: e.target.value })}
+                          className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Date
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.date}
+                            onChange={(e) => updateWs({ date: e.target.value })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Time
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.time}
+                            onChange={(e) => updateWs({ time: e.target.value })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Duration
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.duration}
+                            onChange={(e) => updateWs({ duration: e.target.value })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Seats (Left / Total)
+                          </label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={ws.seatsRemaining}
+                              onChange={(e) => updateWs({ seatsRemaining: Number(e.target.value) || 0 })}
+                              className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                              placeholder="Left"
+                            />
+                            <span className="text-slate-400 text-xs">/</span>
+                            <input
+                              type="number"
+                              value={ws.seatsTotal}
+                              onChange={(e) => updateWs({ seatsTotal: Number(e.target.value) || 0 })}
+                              className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                              placeholder="Total"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Instructor Name
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.instructorName}
+                            onChange={(e) => {
+                              const name = e.target.value;
+                              const initials = name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase() || 'IN';
+                              updateWs({ instructorName: name, instructorInitials: initials });
+                            }}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-2xs font-bold text-slate-600 mb-1">
+                            Instructor Role / Title
+                          </label>
+                          <input
+                            type="text"
+                            value={ws.instructorRole}
+                            onChange={(e) => updateWs({ instructorRole: e.target.value })}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-2xs font-bold text-slate-600 mb-1">
+                          Key Takeaways (one per line)
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={(ws.keyTakeaways || []).join('\n')}
+                          onChange={(e) =>
+                            updateWs({
+                              keyTakeaways: e.target.value
+                                .split('\n')
+                                .map((s) => s.trim())
+                                .filter(Boolean),
+                            })
+                          }
+                          placeholder="e.g. Implement Reciprocal Rank Fusion in Python&#10;Benchmark retrieval recall on technical documents"
+                          className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-blue-500 focus:outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
+
 
         {/* ========================================================================= */}
         {/* TAB 7: COMMUNITY NETWORK */}

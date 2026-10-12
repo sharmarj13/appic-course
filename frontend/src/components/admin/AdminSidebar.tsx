@@ -68,21 +68,21 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
   const newInquiriesCount = inquiries.filter((inq) => inq.status === 'New').length;
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white text-slate-800 border-r border-emerald-900/10 w-72 select-none relative shadow-[1px_0_12px_rgba(6,78,59,0.04)]">
+    <div className="flex flex-col h-full bg-white text-slate-800 border-r border-slate-200/90 w-72 select-none relative shadow-[1px_0_16px_rgba(0,0,0,0.03)]">
       
-      {/* Classic Executive Brand Header */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-emerald-900/10 bg-white z-10">
+      {/* Modern Executive Brand Header */}
+      <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-white z-10">
         <Link href="/admin" className="flex items-center gap-3.5 group cursor-pointer">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-amber-300 flex items-center justify-center font-serif font-bold text-base tracking-tight shadow-md border border-emerald-700/40 group-hover:shadow-emerald-900/20 group-hover:scale-105 transition-all">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 text-white flex items-center justify-center font-bold text-base tracking-tight shadow-md shadow-blue-500/25 border border-blue-400/30 group-hover:scale-105 transition-all">
             AS
           </div>
           <div className="min-w-0">
-            <span className="text-base font-bold tracking-tight text-slate-900 group-hover:text-emerald-800 transition-colors truncate block">
+            <span className="text-base font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors truncate block">
               {settings.siteName || 'Appic Skill'}
             </span>
-            <p className="text-xs font-semibold text-emerald-800/70 flex items-center gap-1.5 mt-0.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block shadow-xs shadow-emerald-500/50" />
-              <span>Executive Console</span>
+            <p className="text-xs font-semibold text-blue-600/90 flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse inline-block shadow-xs shadow-blue-500/50" />
+              <span>Admin Console</span>
             </p>
           </div>
         </Link>
@@ -91,7 +91,7 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
           <button
             type="button"
             onClick={onCloseMobile}
-            className="md:hidden p-2 rounded-xl text-slate-400 hover:text-emerald-900 hover:bg-emerald-50 transition-colors cursor-pointer"
+            className="md:hidden p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
             aria-label="Close sidebar"
           >
             <X className="h-5 w-5" />
@@ -99,11 +99,11 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
         )}
       </div>
 
-      {/* Navigation Groups with Classic Proportions */}
+      {/* Navigation Groups with Modern Proportions */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-7 scrollbar-none z-10">
         {NAV_GROUPS.map((group) => (
           <div key={group.label} className="space-y-1.5">
-            <p className="px-3 text-xs font-bold uppercase tracking-wider text-emerald-900/45 mb-2">
+            <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
               {group.label}
             </p>
             <div className="space-y-1">
@@ -121,16 +121,16 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
                     onClick={onCloseMobile}
                     className={`group relative flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                       isActive
-                        ? 'bg-gradient-to-r from-emerald-950 to-emerald-900 text-white font-semibold shadow-md shadow-emerald-950/20 border border-emerald-800/80'
-                        : 'text-slate-600 hover:text-emerald-950 hover:bg-emerald-50/70'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-md shadow-blue-500/25 border border-blue-500/40'
+                        : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={`h-4.5 w-4.5 shrink-0 transition-colors ${
                           isActive
-                            ? 'text-amber-300'
-                            : 'text-slate-400 group-hover:text-emerald-800'
+                            ? 'text-white'
+                            : 'text-slate-400 group-hover:text-blue-600'
                         }`}
                       />
                       <span className="truncate">{item.label}</span>
@@ -141,15 +141,15 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
                         <span
                           className={`px-2 py-0.5 rounded-full text-xs font-bold shadow-xs ${
                             isActive
-                              ? 'bg-amber-400 text-emerald-950'
-                              : 'bg-amber-500 text-white'
+                              ? 'bg-white/25 text-white'
+                              : 'bg-blue-100 text-blue-700'
                           }`}
                         >
                           {newInquiriesCount} new
                         </span>
                       )}
                       {isActive && (
-                        <ChevronRight className="w-4 h-4 text-emerald-300/80" />
+                        <ChevronRight className="w-4 h-4 text-blue-200" />
                       )}
                     </div>
                   </Link>
@@ -160,39 +160,39 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
         ))}
 
         {/* Client State Persistence Card */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/80 to-teal-50/50 border border-emerald-200/80 space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold text-emerald-950">
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50/70 to-indigo-50/50 border border-blue-200/80 space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold text-blue-900">
             <span className="flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-emerald-700" />
+              <Database className="w-3.5 h-3.5 text-blue-600" />
               <span>Client State Sync</span>
             </span>
-            <span className="text-xs text-emerald-800 font-bold bg-white px-2 py-0.5 rounded-full border border-emerald-200 shadow-2xs">
+            <span className="text-xs text-blue-700 font-bold bg-white px-2 py-0.5 rounded-full border border-blue-200 shadow-2xs">
               Live
             </span>
           </div>
-          <p className="text-xs text-emerald-900/70 leading-relaxed">
+          <p className="text-xs text-blue-800/80 leading-relaxed">
             All edits are synchronized and preserved in browser local storage.
           </p>
         </div>
       </div>
 
-      {/* Classic Administrator Profile Footer */}
-      <div className="p-4 border-t border-emerald-900/10 space-y-3 z-10 bg-white">
+      {/* Administrator Profile Footer */}
+      <div className="p-4 border-t border-slate-100 space-y-3 z-10 bg-white">
         <Link
           href="/"
           target="_blank"
-          className="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-emerald-900/80 hover:text-emerald-950 hover:bg-emerald-50/80 border border-emerald-200/70 transition-colors"
+          className="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50/80 border border-slate-200/80 transition-colors"
         >
           <span className="flex items-center gap-2">
-            <ExternalLink className="h-3.5 w-3.5 text-emerald-600" />
+            <ExternalLink className="h-3.5 w-3.5 text-blue-600" />
             <span>Open Public Website</span>
           </span>
-          <span className="text-[10px] text-emerald-700 uppercase font-bold bg-emerald-100/70 px-1.5 py-0.5 rounded">Live</span>
+          <span className="text-[10px] text-blue-700 uppercase font-bold bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded">Live</span>
         </Link>
 
         <div className="flex items-center justify-between px-2 pt-1">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold text-xs flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">
               AD
             </div>
             <div className="min-w-0">

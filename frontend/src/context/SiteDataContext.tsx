@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { COURSES } from '../data/courses';
 import { BLOG_ARTICLES } from '../data/blogs';
 import { WORKSHOPS } from '../data/workshops';
-import { Course } from '../types/course';
+import { Course, Workshop } from '../types/course';
 import { BlogArticle } from '../types/blog';
 
 export interface SiteSettings {
@@ -57,6 +57,7 @@ export interface HomeWorkshops {
   title: string;
   description: string;
   note: string;
+  items?: Workshop[];
 }
 
 export interface HomePillar {
@@ -362,6 +363,7 @@ const DEFAULT_HOME: HomeContent = {
     title: 'Learn live. Ask questions. Build faster.',
     description: 'Supplement your self-paced modules with live interactive engineering, design, and analytics workshops led by our faculty.',
     note: 'All live workshops include interactive Q&A, downloadable starter repositories, and session recordings.',
+    items: WORKSHOPS,
   },
   community: {
     eyebrow: 'Peer & Mentor Network',
@@ -641,49 +643,83 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
   // Load from API / PostgreSQL on client mount
   useEffect(() => {
     async function loadDataFromDb() {
+      // 1. First restore cached state from LocalStorage if available
       try {
-        // Fetch courses from PostgreSQL
-        const coursesRes = await fetch(`${API_BASE}/courses`);
-        if (coursesRes.ok) {
-          const dbCourses = await coursesRes.json();
+        if (typeof window !== 'undefined') {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const data = JSON.parse(stored);
+            if (data.settings) setSettings((prev) => ({ ...prev, ...data.settings }));
+            if (data.home) setHome((prev) => ({ ...prev, ...data.home }));
+            if (Array.isArray(data.courses) && data.courses.length > 0) setCourses(data.courses);
+            if (Array.isArray(data.blogs) && data.blogs.length > 0) setBlogs(data.blogs);
+            if (Array.isArray(data.inquiries)) setInquiries(data.inquiries);
+            if (Array.isArray(data.faqs)) setFaqs(data.faqs);
+            if (Array.isArray(data.helpArticles)) setHelpArticles(data.helpArticles);
+            if (data.legal) setLegal((prev) => ({ ...prev, ...data.legal }));
+          }
+        }
+      } catch {
+        // Ignore cache parse error
+      }
+
+      // 2. Check and fetch from Backend API if server is running
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1200);
+
+        const healthRes = await fetch(`${API_BASE}/health`, {
+          signal: controller.signal,
+        }).catch(() => null);
+
+        clearTimeout(timeoutId);
+
+        // If backend server is offline or unreachable, seamlessly continue in local mode
+        if (!healthRes || !healthRes.ok) {
+          return;
+        }
+
+        // Backend is reachable, sync latest records from PostgreSQL
+        const [coursesRes, blogsRes, inqRes, setRes, homeRes] = await Promise.allSettled([
+          fetch(`${API_BASE}/courses`),
+          fetch(`${API_BASE}/blogs`),
+          fetch(`${API_BASE}/inquiries`),
+          fetch(`${API_BASE}/settings?key=general_settings`),
+          fetch(`${API_BASE}/settings?key=home_settings`),
+        ]);
+
+        if (coursesRes.status === 'fulfilled' && coursesRes.value.ok) {
+          const dbCourses = await coursesRes.value.json().catch(() => null);
           if (Array.isArray(dbCourses) && dbCourses.length > 0) {
             setCourses(dbCourses);
           }
         }
 
-        // Fetch blogs from PostgreSQL
-        const blogsRes = await fetch(`${API_BASE}/blogs`);
-        if (blogsRes.ok) {
-          const dbBlogs = await blogsRes.json();
+        if (blogsRes.status === 'fulfilled' && blogsRes.value.ok) {
+          const dbBlogs = await blogsRes.value.json().catch(() => null);
           if (Array.isArray(dbBlogs) && dbBlogs.length > 0) {
             setBlogs(dbBlogs);
           }
         }
 
-        // Fetch inquiries from PostgreSQL
-        const inqRes = await fetch(`${API_BASE}/inquiries`);
-        if (inqRes.ok) {
-          const dbInquiries = await inqRes.json();
+        if (inqRes.status === 'fulfilled' && inqRes.value.ok) {
+          const dbInquiries = await inqRes.value.json().catch(() => null);
           if (Array.isArray(dbInquiries) && dbInquiries.length > 0) {
             setInquiries(dbInquiries);
           }
         }
 
-        // Fetch settings from PostgreSQL
-        const setRes = await fetch(`${API_BASE}/settings?key=general_settings`);
-        if (setRes.ok) {
-          const dbSettings = await setRes.json();
+        if (setRes.status === 'fulfilled' && setRes.value.ok) {
+          const dbSettings = await setRes.value.json().catch(() => null);
           if (dbSettings) setSettings((prev) => ({ ...prev, ...dbSettings }));
         }
 
-        // Fetch home settings from PostgreSQL
-        const homeRes = await fetch(`${API_BASE}/settings?key=home_settings`);
-        if (homeRes.ok) {
-          const dbHome = await homeRes.json();
+        if (homeRes.status === 'fulfilled' && homeRes.value.ok) {
+          const dbHome = await homeRes.value.json().catch(() => null);
           if (dbHome) setHome((prev) => ({ ...prev, ...dbHome }));
         }
-      } catch (err) {
-        console.warn('Could not fetch from database API, falling back to local state:', err);
+      } catch {
+        // Quiet fallback to local state
       } finally {
         setIsLoaded(true);
       }
@@ -712,106 +748,83 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
     }
   }, [settings, home, courses, blogs, inquiries, faqs, helpArticles, legal, isLoaded]);
 
+  // Safely sync with backend without crashing when backend is offline
+  const safeBackendFetch = async (url: string, options: RequestInit) => {
+    try {
+      await fetch(url, options).catch(() => null);
+    } catch {
+      // Offline fallback: state is already updated locally and cached in localStorage
+    }
+  };
+
   const updateSettings = async (newSettings: Partial<SiteSettings>) => {
     const updated = { ...settings, ...newSettings };
     setSettings(updated);
-    try {
-      await fetch(`${API_BASE}/settings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'general_settings', data: updated }),
-      });
-    } catch (err) {
-      console.error('Error saving settings to db', err);
-    }
+    safeBackendFetch(`${API_BASE}/settings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'general_settings', data: updated }),
+    });
   };
 
   const updateHome = async (newHome: Partial<HomeContent>) => {
     const updated = { ...home, ...newHome };
     setHome(updated);
-    try {
-      await fetch(`${API_BASE}/settings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'home_settings', data: updated }),
-      });
-    } catch (err) {
-      console.error('Error saving home to db', err);
-    }
+    safeBackendFetch(`${API_BASE}/settings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'home_settings', data: updated }),
+    });
   };
 
   const addCourse = async (course: Course) => {
     setCourses((prev) => [course, ...prev]);
-    try {
-      await fetch(`${API_BASE}/courses`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(course),
-      });
-    } catch (err) {
-      console.error('Error creating course in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/courses`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(course),
+    });
   };
 
   const updateCourse = async (id: string, updated: Partial<Course>) => {
     setCourses((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)));
-    try {
-      await fetch(`${API_BASE}/courses/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated),
-      });
-    } catch (err) {
-      console.error('Error updating course in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/courses/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
   };
 
   const deleteCourse = async (id: string) => {
     setCourses((prev) => prev.filter((c) => c.id !== id));
-    try {
-      await fetch(`${API_BASE}/courses/${id}`, {
-        method: 'DELETE',
-      });
-    } catch (err) {
-      console.error('Error deleting course in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/courses/${id}`, {
+      method: 'DELETE',
+    });
   };
 
   const addBlog = async (blog: BlogArticle) => {
     setBlogs((prev) => [blog, ...prev]);
-    try {
-      await fetch(`${API_BASE}/blogs`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(blog),
-      });
-    } catch (err) {
-      console.error('Error creating blog in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/blogs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(blog),
+    });
   };
 
   const updateBlog = async (id: string, updated: Partial<BlogArticle>) => {
     setBlogs((prev) => prev.map((b) => (b.id === id ? { ...b, ...updated } : b)));
-    try {
-      await fetch(`${API_BASE}/blogs/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated),
-      });
-    } catch (err) {
-      console.error('Error updating blog in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/blogs/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
   };
 
   const deleteBlog = async (id: string) => {
     setBlogs((prev) => prev.filter((b) => b.id !== id));
-    try {
-      await fetch(`${API_BASE}/blogs/${id}`, {
-        method: 'DELETE',
-      });
-    } catch (err) {
-      console.error('Error deleting blog in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/blogs/${id}`, {
+      method: 'DELETE',
+    });
   };
 
   const addInquiry = (inquiry: Omit<Inquiry, 'id' | 'createdAt' | 'status'>): string => {
@@ -826,8 +839,8 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
     };
     setInquiries((prev) => [newInquiry, ...prev]);
 
-    // Persist to PostgreSQL
-    fetch(`${API_BASE}/inquiries`, {
+    // Persist to backend if online
+    safeBackendFetch(`${API_BASE}/inquiries`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -836,7 +849,7 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
         phone: inquiry.phone,
         message: `${inquiry.topic ? `[${inquiry.topic}] ` : ''}${inquiry.message}`,
       }),
-    }).catch((err) => console.error('Error saving inquiry to db', err));
+    });
 
     return id;
   };
@@ -845,26 +858,18 @@ export function SiteDataProvider({ children }: { children: React.ReactNode }) {
     setInquiries((prev) =>
       prev.map((inq) => (inq.id === id ? { ...inq, status } : inq))
     );
-    try {
-      await fetch(`${API_BASE}/inquiries/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-    } catch (err) {
-      console.error('Error updating inquiry status in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/inquiries/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
   };
 
   const deleteInquiry = async (id: string) => {
     setInquiries((prev) => prev.filter((inq) => inq.id !== id));
-    try {
-      await fetch(`${API_BASE}/inquiries/${id}`, {
-        method: 'DELETE',
-      });
-    } catch (err) {
-      console.error('Error deleting inquiry in db', err);
-    }
+    safeBackendFetch(`${API_BASE}/inquiries/${id}`, {
+      method: 'DELETE',
+    });
   };
 
   const addFaq = (faq: Omit<FaqItem, 'id'>) => {

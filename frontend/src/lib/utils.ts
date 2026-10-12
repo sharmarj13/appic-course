@@ -13,3 +13,10 @@ export function formatCurrency(amount: number): string {
 export function formatNumber(num: number): string {
   return new Intl.NumberFormat('en-IN').format(num);
 }
+
+export function getCleanWhatsApp(phone?: string, defaultNumber = '919887354080'): string {
+  if (!phone) return defaultNumber;
+  const cleaned = phone.replace(/[^0-9]/g, '');
+  return cleaned.length >= 10 ? cleaned : defaultNumber;
+}
+

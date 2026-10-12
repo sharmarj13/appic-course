@@ -89,7 +89,7 @@ export default function AdminHelpCenterPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               Knowledge Base
             </span>
             <span className="text-slate-400 text-xs font-medium">• Live Sync with /help</span>
@@ -106,16 +106,16 @@ export default function AdminHelpCenterPage() {
           <Link
             href="/help"
             target="_blank"
-            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50/60 hover:text-emerald-950 hover:border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-blue-50/60 hover:text-blue-700 hover:border-blue-200 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-emerald-700" />
+            <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
             View Public Page
           </Link>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Plus className="w-4 h-4 text-emerald-300" />
+            <Plus className="w-4 h-4 text-blue-100" />
             New Guide Article
           </button>
         </div>
@@ -231,7 +231,7 @@ export default function AdminHelpCenterPage() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 shadow-2xl">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
               <h2 className="text-lg font-bold text-slate-900">
@@ -303,9 +303,9 @@ export default function AdminHelpCenterPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Check className="w-4 h-4 text-emerald-300" />
+                  <Check className="w-4 h-4 text-blue-100" />
                   {editingArticle ? 'Save Changes' : 'Publish Article'}
                 </button>
               </div>
@@ -316,7 +316,7 @@ export default function AdminHelpCenterPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Help Article?</h3>
             <p className="text-xs text-slate-600 mb-6">

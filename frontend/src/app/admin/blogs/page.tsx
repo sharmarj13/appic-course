@@ -17,10 +17,17 @@ import {
   Image as ImageIcon,
   Sparkles,
   Link as LinkIcon,
-  Copy
+  Copy,
+  ChevronUp,
+  ChevronDown,
+  List,
+  Table as TableIcon,
+  AlignLeft,
+  FileText,
+  Code
 } from 'lucide-react';
 import { useSiteData } from '../../../context/SiteDataContext';
-import { BlogArticle, BlogCategory, BlogSection } from '../../../types/blog';
+import { BlogArticle, BlogCategory, BlogSection, BlogTableData } from '../../../types/blog';
 
 // Presets for 1-click blog cover selection
 import blogEditorialImg from '../../../assets/images/blog_featured_editorial_1791367171346.jpg';
@@ -120,10 +127,292 @@ export default function AdminBlogsPage() {
   };
 
   const openEditModal = (b: BlogArticle) => {
-    setFormBlog({ ...b });
+    setFormBlog({
+      ...b,
+      sections: b.sections ? JSON.parse(JSON.stringify(b.sections)) : [
+        {
+          id: 'sec-1',
+          heading: 'Overview',
+          paragraphs: [b.excerpt || 'Article body content.'],
+          listItems: [],
+        }
+      ],
+    });
     setUserCustomizedSlug(true);
     setEditingBlog(b);
     setIsCreating(false);
+  };
+
+  // Section Management Handlers
+  const handleAddSection = () => {
+    const nextNumber = (formBlog.sections?.length || 0) + 1;
+    const newSec: BlogSection = {
+      id: `sec-${Date.now()}`,
+      heading: `Section ${nextNumber}`,
+      paragraphs: ['Write section content here.'],
+      listItems: [],
+    };
+    setFormBlog((prev) => ({
+      ...prev,
+      sections: [...(prev.sections || []), newSec],
+    }));
+  };
+
+  const handleRemoveSection = (secIndex: number) => {
+    setFormBlog((prev) => ({
+      ...prev,
+      sections: (prev.sections || []).filter((_, idx) => idx !== secIndex),
+    }));
+  };
+
+  const handleMoveSection = (index: number, direction: 'up' | 'down') => {
+    const secs = [...(formBlog.sections || [])];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= secs.length) return;
+    const temp = secs[index];
+    secs[index] = secs[targetIndex];
+    secs[targetIndex] = temp;
+    setFormBlog((prev) => ({ ...prev, sections: secs }));
+  };
+
+  const handleSectionHeadingChange = (secIndex: number, val: string) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      secs[secIndex] = { ...secs[secIndex], heading: val };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleParagraphChange = (secIndex: number, pIndex: number, val: string) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      const pars = [...(secs[secIndex].paragraphs || [])];
+      pars[pIndex] = val;
+      secs[secIndex] = { ...secs[secIndex], paragraphs: pars };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleAddParagraph = (secIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      secs[secIndex] = {
+        ...secs[secIndex],
+        paragraphs: [...(secs[secIndex].paragraphs || []), ''],
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleRemoveParagraph = (secIndex: number, pIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      const pars = (secs[secIndex].paragraphs || []).filter((_, idx) => idx !== pIndex);
+      secs[secIndex] = { ...secs[secIndex], paragraphs: pars.length > 0 ? pars : [''] };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleBulletChange = (secIndex: number, bIndex: number, val: string) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      const items = [...(secs[secIndex].listItems || [])];
+      items[bIndex] = val;
+      secs[secIndex] = { ...secs[secIndex], listItems: items };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleAddBullet = (secIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      secs[secIndex] = {
+        ...secs[secIndex],
+        listItems: [...(secs[secIndex].listItems || []), ''],
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleRemoveBullet = (secIndex: number, bIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      const items = (secs[secIndex].listItems || []).filter((_, idx) => idx !== bIndex);
+      secs[secIndex] = { ...secs[secIndex], listItems: items };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleSectionImageChange = (
+    secIndex: number,
+    key: 'imageUrl' | 'imageCaption',
+    val: string
+  ) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      secs[secIndex] = { ...secs[secIndex], [key]: val };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleSectionFileUpload = (
+    secIndex: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleSectionImageChange(secIndex, 'imageUrl', reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleToggleTable = (secIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (secs[secIndex].table) {
+        const copy = { ...secs[secIndex] };
+        delete copy.table;
+        secs[secIndex] = copy;
+      } else {
+        secs[secIndex] = {
+          ...secs[secIndex],
+          table: {
+            headers: ['Feature / Aspect', 'Details & Implementation', 'Status'],
+            rows: [
+              ['Core Concept', 'Description of fundamental mechanism', 'Active'],
+              ['Optimization', 'Speed and benchmark notes', 'Recommended'],
+            ],
+          },
+        };
+      }
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleTableHeaderChange = (secIndex: number, hIndex: number, val: string) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table) return prev;
+      const headers = [...secs[secIndex].table!.headers];
+      headers[hIndex] = val;
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: { ...secs[secIndex].table!, headers },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleAddTableColumn = (secIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table) return prev;
+      const headers = [
+        ...secs[secIndex].table!.headers,
+        `Column ${secs[secIndex].table!.headers.length + 1}`,
+      ];
+      const rows = secs[secIndex].table!.rows.map((row) => [...row, '']);
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: { headers, rows },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleRemoveTableColumn = (secIndex: number, colIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table || secs[secIndex].table!.headers.length <= 1) return prev;
+      const headers = secs[secIndex].table!.headers.filter((_, idx) => idx !== colIndex);
+      const rows = secs[secIndex].table!.rows.map((row) =>
+        row.filter((_, idx) => idx !== colIndex)
+      );
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: { headers, rows },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleTableCellChange = (
+    secIndex: number,
+    rIndex: number,
+    cIndex: number,
+    val: string
+  ) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table) return prev;
+      const rows = secs[secIndex].table!.rows.map((row, idx) => {
+        if (idx !== rIndex) return row;
+        const newRow = [...row];
+        newRow[cIndex] = val;
+        return newRow;
+      });
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: { ...secs[secIndex].table!, rows },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleAddTableRow = (secIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table) return prev;
+      const newRow = new Array(secs[secIndex].table!.headers.length).fill('');
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: {
+          ...secs[secIndex].table!,
+          rows: [...secs[secIndex].table!.rows, newRow],
+        },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleRemoveTableRow = (secIndex: number, rIndex: number) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      if (!secs[secIndex].table || secs[secIndex].table!.rows.length <= 1) return prev;
+      const rows = secs[secIndex].table!.rows.filter((_, idx) => idx !== rIndex);
+      secs[secIndex] = {
+        ...secs[secIndex],
+        table: { ...secs[secIndex].table!, rows },
+      };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleTakeawayChange = (secIndex: number, val: string) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      secs[secIndex] = { ...secs[secIndex], keyTakeaway: val };
+      return { ...prev, sections: secs };
+    });
+  };
+
+  const handleCodeSnippetChange = (
+    secIndex: number,
+    field: 'language' | 'code',
+    val: string
+  ) => {
+    setFormBlog((prev) => {
+      const secs = [...(prev.sections || [])];
+      const existing = secs[secIndex].codeSnippet || { language: 'typescript', code: '' };
+      secs[secIndex] = {
+        ...secs[secIndex],
+        codeSnippet: { ...existing, [field]: val },
+      };
+      return { ...prev, sections: secs };
+    });
   };
 
   const handleTitleChange = (val: string) => {
@@ -228,7 +517,7 @@ export default function AdminBlogsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/90">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               Editorial & Publishing
             </span>
             <span className="text-slate-400 text-xs font-medium">• Live Sync with /blog</span>
@@ -244,9 +533,9 @@ export default function AdminBlogsPage() {
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer w-fit"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 transition-all cursor-pointer w-fit"
         >
-          <Plus className="h-4 w-4 text-emerald-300" />
+          <Plus className="h-4 w-4 text-blue-100" />
           <span>New Article</span>
         </button>
       </div>
@@ -272,7 +561,7 @@ export default function AdminBlogsPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-slate-900 text-white shadow-xs font-semibold'
+                  ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
               }`}
             >
@@ -403,7 +692,7 @@ export default function AdminBlogsPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-200 p-6 shadow-2xl space-y-4">
             <div className="flex items-center gap-3 text-red-600">
               <AlertCircle className="h-6 w-6" />
@@ -437,8 +726,8 @@ export default function AdminBlogsPage() {
 
       {/* Create / Edit Article Modal */}
       {(isCreating || editingBlog) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
                 <span className="text-xs font-mono text-purple-700 uppercase font-bold tracking-wider">
@@ -696,6 +985,452 @@ export default function AdminBlogsPage() {
                 </div>
               </div>
 
+              {/* Article Content & Sections Manager (Details Page Body) */}
+              <div className="space-y-6 pt-6 border-t border-slate-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-purple-50/80 to-blue-50/50 p-4 rounded-2xl border border-purple-200/80">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-purple-700" />
+                      <h3 className="text-sm font-bold text-slate-900">
+                        Article Content & Sections (Details Page)
+                      </h3>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                        {formBlog.sections?.length || 0} Parts
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1">
+                      Manage each section's headings, text paragraphs, in-article images, bullet points, and data tables.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleAddSection}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 transition-all cursor-pointer self-start sm:self-auto shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-blue-100" />
+                    <span>Add New Section</span>
+                  </button>
+                </div>
+
+                {/* Sections List */}
+                <div className="space-y-6">
+                  {formBlog.sections && formBlog.sections.length > 0 ? (
+                    formBlog.sections.map((sec, sIdx) => (
+                      <div
+                        key={sec.id || sIdx}
+                        className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs space-y-5"
+                      >
+                        {/* Section Header Toolbar */}
+                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                          <div className="flex items-center gap-2.5">
+                            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                              Part {String(sIdx + 1).padStart(2, '0')}
+                            </span>
+                            <span className="text-xs font-bold text-slate-800 truncate max-w-[200px] sm:max-w-xs">
+                              {sec.heading || 'Untitled Section'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleMoveSection(sIdx, 'up')}
+                              disabled={sIdx === 0}
+                              title="Move up"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                              <ChevronUp className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleMoveSection(sIdx, 'down')}
+                              disabled={sIdx === (formBlog.sections?.length || 1) - 1}
+                              title="Move down"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                              <ChevronDown className="w-4 h-4" />
+                            </button>
+                            {(formBlog.sections?.length || 0) > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveSection(sIdx)}
+                                title="Delete section"
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer ml-1"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Section Heading Input */}
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
+                            Section Heading / Part Title *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={sec.heading}
+                            onChange={(e) => handleSectionHeadingChange(sIdx, e.target.value)}
+                            placeholder="e.g. Introduction & Core Concepts"
+                            className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-900 focus:border-purple-500 focus:outline-none"
+                          />
+                        </div>
+
+                        {/* Paragraphs Editor */}
+                        <div className="space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                              <AlignLeft className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Paragraphs ({sec.paragraphs?.length || 0})</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => handleAddParagraph(sIdx)}
+                              className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add Paragraph</span>
+                            </button>
+                          </div>
+
+                          <div className="space-y-2">
+                            {sec.paragraphs?.map((p, pIdx) => (
+                              <div key={pIdx} className="flex items-start gap-2">
+                                <textarea
+                                  rows={3}
+                                  value={p}
+                                  onChange={(e) =>
+                                    handleParagraphChange(sIdx, pIdx, e.target.value)
+                                  }
+                                  placeholder={`Paragraph ${pIdx + 1} content...`}
+                                  className="flex-1 rounded-xl border border-slate-200 bg-white p-3 text-xs sm:text-sm text-slate-800 focus:border-purple-500 focus:outline-none leading-relaxed"
+                                />
+                                {sec.paragraphs.length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveParagraph(sIdx, pIdx)}
+                                    title="Delete paragraph"
+                                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer mt-1"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Bullet Points List (ul / li) */}
+                        <div className="space-y-2.5 p-4 rounded-xl bg-slate-50/70 border border-slate-200">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                              <List className="w-3.5 h-3.5 text-purple-600" />
+                              <span>Bullet Points List (ul / li)</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => handleAddBullet(sIdx)}
+                              className="text-xs font-bold text-purple-700 hover:text-purple-900 flex items-center gap-1 cursor-pointer"
+                            >
+                              <Plus className="w-3 h-3" />
+                              <span>Add Bullet Point</span>
+                            </button>
+                          </div>
+
+                          {sec.listItems && sec.listItems.length > 0 ? (
+                            <div className="space-y-2">
+                              {sec.listItems.map((item, bIdx) => (
+                                <div key={bIdx} className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                                  <input
+                                    type="text"
+                                    value={item}
+                                    onChange={(e) =>
+                                      handleBulletChange(sIdx, bIdx, e.target.value)
+                                    }
+                                    placeholder={`Bullet point ${bIdx + 1}...`}
+                                    className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-purple-500 focus:outline-none"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveBullet(sIdx, bIdx)}
+                                    title="Remove bullet point"
+                                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-slate-400 italic">
+                              No bullet list added for this section. Click "+ Add Bullet Point" to add.
+                            </p>
+                          )}
+                        </div>
+
+                        {/* In-Section Image / Diagram */}
+                        <div className="space-y-2.5 p-4 rounded-xl bg-slate-50/70 border border-slate-200">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                              <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Section Image / Diagram</span>
+                            </label>
+                            {sec.imageUrl && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  handleSectionImageChange(sIdx, 'imageUrl', '');
+                                  handleSectionImageChange(sIdx, 'imageCaption', '');
+                                }}
+                                className="text-xs font-bold text-red-600 hover:underline cursor-pointer"
+                              >
+                                Remove Image
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+                            <div className="space-y-2">
+                              <input
+                                type="text"
+                                value={sec.imageUrl || ''}
+                                onChange={(e) =>
+                                  handleSectionImageChange(sIdx, 'imageUrl', e.target.value)
+                                }
+                                placeholder="Paste image URL (https://...)"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-purple-500 focus:outline-none font-mono"
+                              />
+                              <div className="flex items-center gap-2">
+                                <label className="px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                  <Upload className="w-3 h-3 text-purple-600" />
+                                  <span>Upload File</span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleSectionFileUpload(sIdx, e)}
+                                    className="hidden"
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  value={sec.imageCaption || ''}
+                                  onChange={(e) =>
+                                    handleSectionImageChange(sIdx, 'imageCaption', e.target.value)
+                                  }
+                                  placeholder="Caption (e.g. Architecture Flowchart)"
+                                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 focus:border-purple-500 focus:outline-none"
+                                />
+                              </div>
+                            </div>
+
+                            {sec.imageUrl && (
+                              <div className="relative h-24 w-full rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                                <img
+                                  src={sec.imageUrl}
+                                  alt="Section visual preview"
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Section Data Table */}
+                        <div className="space-y-3 p-4 rounded-xl bg-slate-50/70 border border-slate-200">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                              <TableIcon className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Section Data Table</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleTable(sIdx)}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                                sec.table
+                                  ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
+                                  : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                              }`}
+                            >
+                              {sec.table ? 'Remove Table' : '+ Enable Table in this Section'}
+                            </button>
+                          </div>
+
+                          {sec.table && (
+                            <div className="space-y-3 bg-white p-3.5 rounded-xl border border-slate-200 overflow-x-auto">
+                              <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
+                                <span className="text-xs font-bold text-slate-700">
+                                  Table Headers ({sec.table.headers.length} Columns):
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddTableColumn(sIdx)}
+                                  className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  <span>Add Column</span>
+                                </button>
+                              </div>
+
+                              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                                {sec.table.headers.map((hdr, hIdx) => (
+                                  <div
+                                    key={hIdx}
+                                    className="flex items-center gap-1 min-w-[140px] flex-1"
+                                  >
+                                    <input
+                                      type="text"
+                                      value={hdr}
+                                      onChange={(e) =>
+                                        handleTableHeaderChange(sIdx, hIdx, e.target.value)
+                                      }
+                                      placeholder={`Header ${hIdx + 1}`}
+                                      className="w-full rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-800 focus:bg-white focus:border-purple-500 focus:outline-none"
+                                    />
+                                    {sec.table!.headers.length > 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveTableColumn(sIdx, hIdx)}
+                                        title="Delete column"
+                                        className="p-1 text-slate-400 hover:text-red-600 cursor-pointer"
+                                      >
+                                        <X className="w-3 h-3" />
+                                      </button>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="space-y-2 pt-2 border-t border-slate-100">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-xs font-bold text-slate-700">
+                                    Table Rows ({sec.table.rows.length}):
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleAddTableRow(sIdx)}
+                                    className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 cursor-pointer"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    <span>Add Row</span>
+                                  </button>
+                                </div>
+
+                                {sec.table.rows.map((row, rIdx) => (
+                                  <div key={rIdx} className="flex items-center gap-2">
+                                    <span className="text-xs font-mono font-bold text-slate-400 w-5 text-center shrink-0">
+                                      {rIdx + 1}
+                                    </span>
+                                    <div
+                                      className="flex-1 grid gap-2"
+                                      style={{
+                                        gridTemplateColumns: `repeat(${sec.table!.headers.length}, minmax(0, 1fr))`,
+                                      }}
+                                    >
+                                      {row.map((cell, cIdx) => (
+                                        <input
+                                          key={cIdx}
+                                          type="text"
+                                          value={cell}
+                                          onChange={(e) =>
+                                            handleTableCellChange(
+                                              sIdx,
+                                              rIdx,
+                                              cIdx,
+                                              e.target.value
+                                            )
+                                          }
+                                          placeholder={`Cell (${rIdx + 1}, ${cIdx + 1})`}
+                                          className="w-full rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800 focus:border-purple-500 focus:outline-none"
+                                        />
+                                      ))}
+                                    </div>
+                                    {sec.table!.rows.length > 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveTableRow(sIdx, rIdx)}
+                                        title="Delete row"
+                                        className="p-1 text-slate-400 hover:text-red-600 cursor-pointer"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Strategic Takeaway (Optional) */}
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Strategic Takeaway Callout (Optional)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={sec.keyTakeaway || ''}
+                            onChange={(e) => handleTakeawayChange(sIdx, e.target.value)}
+                            placeholder="Highlight key takeaway or summary insight for this section..."
+                            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:border-purple-500 focus:outline-none"
+                          />
+                        </div>
+
+                        {/* Code Snippet (Optional) */}
+                        <div className="space-y-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-bold flex items-center gap-1.5 text-blue-700">
+                              <Code className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Code Snippet (Optional)</span>
+                            </label>
+                            <select
+                              value={sec.codeSnippet?.language || 'typescript'}
+                              onChange={(e) =>
+                                handleCodeSnippetChange(sIdx, 'language', e.target.value)
+                              }
+                              className="bg-white text-slate-700 text-xs rounded-md px-2.5 py-1 border border-slate-200 focus:border-blue-500 focus:outline-none shadow-2xs font-medium"
+                            >
+                              <option value="typescript">TypeScript</option>
+                              <option value="javascript">JavaScript</option>
+                              <option value="python">Python</option>
+                              <option value="html">HTML</option>
+                              <option value="css">CSS</option>
+                              <option value="bash">Bash / Shell</option>
+                              <option value="sql">SQL</option>
+                              <option value="json">JSON</option>
+                            </select>
+                          </div>
+                          <textarea
+                            rows={3}
+                            value={sec.codeSnippet?.code || ''}
+                            onChange={(e) =>
+                              handleCodeSnippetChange(sIdx, 'code', e.target.value)
+                            }
+                            placeholder="// Paste code snippet here (leave blank if not needed)..."
+                            className="w-full rounded-lg bg-white border border-slate-200 p-2.5 text-xs font-mono text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none shadow-2xs"
+                          />
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-8 text-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-slate-500">
+                      <p className="text-xs">No sections added yet.</p>
+                      <button
+                        type="button"
+                        onClick={handleAddSection}
+                        className="mt-3 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        + Add First Section
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
@@ -710,7 +1445,7 @@ export default function AdminBlogsPage() {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 transition-all cursor-pointer"
                 >
                   {isCreating ? 'Publish Article' : 'Save Changes'}
                 </button>

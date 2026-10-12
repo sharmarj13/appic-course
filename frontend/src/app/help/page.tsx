@@ -19,6 +19,7 @@ import {
 import { PageSEO } from '../../components/common/PageSEO';
 import { Container } from '../../components/common/Container';
 import { Button } from '../../components/common/Button';
+import { useSiteData } from '../../context/SiteDataContext';
 
 interface HelpCategory {
   id: string;
@@ -106,14 +107,16 @@ const POPULAR_ARTICLES = [
   },
 ];
 
-import { useSiteData } from '../../context/SiteDataContext';
-
 export default function HelpCenterPage() {
   const { helpArticles, settings } = useSiteData();
   const [searchQuery, setSearchQuery] = useState('');
   const [openArticle, setOpenArticle] = useState<number | null>(0);
 
-  const filteredArticles = helpArticles.filter(
+  const activeArticles = (helpArticles && helpArticles.length > 0)
+    ? helpArticles
+    : POPULAR_ARTICLES.map((p, idx) => ({ id: `h-${idx}`, ...p }));
+
+  const filteredArticles = activeArticles.filter(
     (article) =>
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -188,6 +191,10 @@ export default function HelpCenterPage() {
               return (
                 <div
                   key={cat.id}
+                  onClick={() => {
+                    setSearchQuery(cat.title.split(' ')[0]);
+                    window.scrollTo({ top: 600, behavior: 'smooth' });
+                  }}
                   className="group rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5 cursor-pointer"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">

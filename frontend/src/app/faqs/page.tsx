@@ -14,6 +14,7 @@ import {
 import { PageSEO } from '../../components/common/PageSEO';
 import { Container } from '../../components/common/Container';
 import { Button } from '../../components/common/Button';
+import { useSiteData } from '../../context/SiteDataContext';
 
 interface FaqItem {
   question: string;
@@ -93,15 +94,15 @@ const FAQ_DATA: FaqItem[] = [
   },
 ];
 
-import { useSiteData } from '../../context/SiteDataContext';
-
 export default function FaqsPage() {
   const { faqs } = useSiteData();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const filteredFaqs = faqs.filter((faq) => {
+  const activeFaqs = (faqs && faqs.length > 0) ? faqs : FAQ_DATA;
+
+  const filteredFaqs = activeFaqs.filter((faq) => {
     const matchesCategory =
       selectedCategory === 'All' || faq.category === selectedCategory;
     const matchesSearch =

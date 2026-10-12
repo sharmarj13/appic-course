@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { X, CheckCircle2, ArrowRight, Lock, Calendar, BookOpen } from 'lucide-react';
 import { Button } from './Button';
+import { useSiteData } from '../../context/SiteDataContext';
 
 type ModalState =
   | { type: 'none' }
@@ -27,6 +28,7 @@ export function useActionModal() {
 }
 
 export function ActionModalProvider({ children }: { children: React.ReactNode }) {
+  const { addInquiry } = useSiteData();
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
@@ -74,8 +76,29 @@ export function ActionModalProvider({ children }: { children: React.ReactNode })
       return;
     }
     setError('');
+    
+    // Automatically record student leads into Admin Inquiries
+    if (modal.type === 'enroll') {
+      addInquiry({
+        fullName: fullName.trim() || 'Prospective Student',
+        email: email.trim(),
+        topic: 'Course Enrollment',
+        experienceLevel: 'Prospective Student',
+        message: `Direct enrollment request for course: "${modal.courseTitle}" (Tuition: ₹${modal.price}).`,
+      });
+    } else if (modal.type === 'workshop') {
+      addInquiry({
+        fullName: fullName.trim() || 'Workshop Attendee',
+        email: email.trim(),
+        topic: 'Live Workshop Registration',
+        experienceLevel: 'Workshop Attendee',
+        message: `Registered for live workshop: "${modal.workshopTitle}" on ${modal.workshopDate} led by ${modal.instructor}.`,
+      });
+    }
+
     setSubmitted(true);
   };
+
 
   return (
     <ActionModalContext.Provider

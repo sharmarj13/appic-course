@@ -18,6 +18,7 @@ export function Workshops() {
     description: 'Supplement your self-paced modules with live interactive engineering, design, and analytics workshops led by our faculty.',
     note: 'All live workshops include interactive Q&A, downloadable starter repositories, and session recordings.',
   };
+  const workshopItems = (workshopsContent.items && workshopsContent.items.length > 0) ? workshopsContent.items : WORKSHOPS;
 
   return (
     <section id="workshops" className="py-8 lg:py-10 bg-slate-950 text-white relative overflow-hidden">
@@ -41,7 +42,7 @@ export function Workshops() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {WORKSHOPS.map((ws, index) => (
+          {workshopItems.map((ws, index) => (
             <motion.div
               key={ws.id}
               initial={{ opacity: 0, y: 16 }}

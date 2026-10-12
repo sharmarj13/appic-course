@@ -6,10 +6,19 @@ export type BlogCategory =
   | 'Business'
   | 'Learning';
 
+export interface BlogTableData {
+  headers: string[];
+  rows: string[][];
+}
+
 export interface BlogSection {
   id: string;
   heading: string;
   paragraphs: string[];
+  listItems?: string[];
+  imageUrl?: string;
+  imageCaption?: string;
+  table?: BlogTableData;
   keyTakeaway?: string;
   codeSnippet?: {
     language: string;

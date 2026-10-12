@@ -56,6 +56,71 @@ export function ArticleContent({ article }: ArticleContentProps) {
             ))}
           </div>
 
+          {/* Section Image / Infographic */}
+          {sec.imageUrl && (
+            <figure className="my-6 rounded-2xl overflow-hidden border border-slate-200/90 bg-slate-50 shadow-xs">
+              <div className="relative max-h-[460px] overflow-hidden bg-slate-100 flex items-center justify-center">
+                <img
+                  src={sec.imageUrl}
+                  alt={sec.imageCaption || sec.heading}
+                  className="w-full h-auto max-h-[460px] object-cover"
+                />
+              </div>
+              {sec.imageCaption && (
+                <figcaption className="p-3 text-center text-xs font-medium text-slate-500 bg-slate-50 border-t border-slate-100 italic">
+                  {sec.imageCaption}
+                </figcaption>
+              )}
+            </figure>
+          )}
+
+          {/* Bullet Points List (ul / li) */}
+          {sec.listItems && sec.listItems.filter((i) => i && i.trim()).length > 0 && (
+            <div className="my-6 rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-2xs">
+              <ul className="space-y-3">
+                {sec.listItems.filter((i) => i && i.trim()).map((item, lIdx) => (
+                  <li key={lIdx} className="flex items-start gap-3 text-base text-slate-700">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-2.5 shadow-xs" />
+                    <span className="leading-relaxed font-normal">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Section Data Table */}
+          {sec.table && sec.table.headers && sec.table.headers.length > 0 && (
+            <div className="my-6 overflow-hidden rounded-2xl border border-slate-200 shadow-2xs bg-white">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                  <thead className="bg-slate-100/90 text-slate-900 border-b border-slate-200">
+                    <tr>
+                      {sec.table.headers.map((h, hIdx) => (
+                        <th
+                          key={hIdx}
+                          className="py-3 px-4 font-bold uppercase tracking-wider text-xs text-slate-700 whitespace-nowrap"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {sec.table.rows && sec.table.rows.map((row, rIdx) => (
+                      <tr key={rIdx} className="hover:bg-slate-50/70 transition-colors">
+                        {row.map((cell, cIdx) => (
+                          <td key={cIdx} className="py-3 px-4 text-slate-700 font-normal">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           {/* Key Takeaway Callout Box */}
           {sec.keyTakeaway && (
             <div className="rounded-2xl border border-amber-200/90 bg-amber-50/70 p-6 sm:p-7 shadow-2xs">

@@ -16,8 +16,9 @@ import {
   BookOpen
 } from 'lucide-react';
 import { Course } from '../../types/course';
-import { formatCurrency, formatNumber } from '../../lib/utils';
+import { formatCurrency, formatNumber, getCleanWhatsApp } from '../../lib/utils';
 import { PREMIUM_EASE } from '../../lib/motion';
+import { useSiteData } from '../../context/SiteDataContext';
 
 interface CourseCardProps {
   course: Course;
@@ -25,6 +26,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, index = 0 }: CourseCardProps) {
+  const { settings } = useSiteData();
   const [imgError, setImgError] = useState(false);
 
   const renderFallbackIcon = () => {
@@ -143,7 +145,7 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
 
         <div className="flex items-center gap-2 shrink-0">
           <a
-            href={`https://wa.me/919887354080?text=I%20want%20to%20buy%20this%20course:%20${encodeURIComponent(course.title)}`}
+            href={`https://wa.me/${getCleanWhatsApp(settings?.whatsappNumber)}?text=I%20want%20to%20buy%20this%20course:%20${encodeURIComponent(course.title)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg bg-green-500 border border-green-600 shadow-sm px-3.5 py-2 text-xs font-bold text-white transition-all duration-200 hover:bg-green-600 whitespace-nowrap"

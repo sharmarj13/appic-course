@@ -160,9 +160,9 @@ export default function AdminLegalPage() {
 
           <button
             onClick={handleSaveAll}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all cursor-pointer"
+            className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 text-blue-100" />
             {savedNotice ? 'Saved!' : 'Save All Changes'}
           </button>
         </div>
@@ -174,8 +174,8 @@ export default function AdminLegalPage() {
           onClick={() => setActiveTab('privacy')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'privacy'
-              ? 'bg-gradient-to-r from-emerald-950 to-emerald-900 text-white shadow-xs border border-emerald-800/80'
-              : 'bg-slate-100 text-slate-600 hover:bg-emerald-50/70 hover:text-emerald-950 border border-transparent'
+              ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
           }`}
         >
           <ShieldCheck className="w-4 h-4" />
@@ -189,8 +189,8 @@ export default function AdminLegalPage() {
           onClick={() => setActiveTab('terms')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'terms'
-              ? 'bg-gradient-to-r from-emerald-950 to-emerald-900 text-white shadow-xs border border-emerald-800/80'
-              : 'bg-slate-100 text-slate-600 hover:bg-emerald-50/70 hover:text-emerald-950 border border-transparent'
+              ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900 border border-transparent'
           }`}
         >
           <FileText className="w-4 h-4" />
@@ -301,7 +301,7 @@ export default function AdminLegalPage() {
 
       {/* Add / Edit Section Modal */}
       {isSectionModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
               <h2 className="text-lg font-bold text-slate-900">

@@ -34,6 +34,15 @@ model Course {
   curriculum       Json     // CurriculumModule[]
   reviews          Json     // CourseReview[]
   faqs             Json     // CourseFAQItem[]
+  trainingOffered  Json?    // TrainingOfferedData
+  placements       Json?    // PlacementItem[]
+  toolsCovered     Json?    // string[] | ToolItem[]
+  futureScope      Json?    // FutureScopeData
+  certificateInfo  Json?    // CertificateData
+  programFeatures  Json?    // string[]
+  courseType       String?  @default("Self-Paced")
+  language         String?  @default("English")
+  brochureUrl      String?
   featured         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

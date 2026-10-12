@@ -19,15 +19,17 @@ import {
 } from '../../../components/courses/CourseDetailSections';
 import { Testimonials } from '../../../components/home/Testimonials';
 import { CourseCard } from '../../../components/courses/CourseCard';
+import { TrainingOfferedTab, ReviewsRatingTab } from '../../../components/courses/CourseTabsContent';
 import { useSiteData } from '../../../context/SiteDataContext';
 import { useActionModal } from '../../../components/common/ActionModalContext';
-import { formatCurrency } from '../../../lib/utils';
+import { CourseReview } from '../../../types/course';
+import { formatCurrency, getCleanWhatsApp } from '../../../lib/utils';
 
 export default function CourseDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { courses, isLoaded } = useSiteData();
+  const { courses, updateCourse, isLoaded, settings } = useSiteData();
   const { openEnrollModal } = useActionModal();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'training' | 'reviews'>('overview');
 
   const normalizedSlug = slug ? decodeURIComponent(slug).trim().toLowerCase() : '';
   const course = courses.find(
@@ -36,6 +38,16 @@ export default function CourseDetailPage() {
       c.slug === slug ||
       c.id === slug
   );
+
+  const handleAddReview = (newReview: CourseReview) => {
+    if (!course) return;
+    const existing = course.reviews || [];
+    const updatedReviews = [newReview, ...existing];
+    updateCourse(course.id, {
+      reviews: updatedReviews,
+      reviewsCount: (course.reviewsCount || existing.length) + 1,
+    });
+  };
 
   if (!course) {
     if (!isLoaded) {
@@ -114,10 +126,20 @@ export default function CourseDetailPage() {
                     <p>By the end of this course, you will be able to master the advanced concepts and apply them practically.</p>
                   </div>
 
-                  <ToolsCovered />
+                  <ToolsCovered tools={course.toolsCovered} courseTitle={course.title} />
 
                   <Curriculum modules={course.curriculum} />
                 </div>
+              )}
+
+              {/* Training Offered Tab */}
+              {activeTab === 'training' && (
+                <TrainingOfferedTab course={course} />
+              )}
+
+              {/* Reviews & Rating Tab */}
+              {activeTab === 'reviews' && (
+                <ReviewsRatingTab course={course} onAddReview={handleAddReview} />
               )}
             </div>
 
@@ -125,8 +147,12 @@ export default function CourseDetailPage() {
             <aside className="lg:col-span-4 lg:sticky lg:top-24">
               <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-lg flex flex-col items-center text-center">
                  {/* Thumbnail */}
-                 <div className="w-full aspect-video bg-gradient-to-r from-emerald-400 to-teal-500 rounded-lg flex items-center justify-center text-white mb-6">
-                    <span className="font-bold">{course.title}</span>
+                 <div className="w-full aspect-video bg-gradient-to-r from-emerald-400 to-teal-500 rounded-lg flex items-center justify-center text-white mb-6 overflow-hidden">
+                    {course.imageUrl ? (
+                      <img src={course.imageUrl} alt={course.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="font-bold px-4">{course.title}</span>
+                    )}
                  </div>
                  
                  <h3 className="text-xl font-bold text-slate-900 mb-2">Program Fees</h3>
@@ -136,17 +162,17 @@ export default function CourseDetailPage() {
                  </div>
                  
                  <button 
-                   className="w-full bg-blue-600 text-white rounded-md py-3 font-bold mb-3 hover:bg-blue-700"
+                   className="w-full bg-blue-600 text-white rounded-md py-3 font-bold mb-3 hover:bg-blue-700 cursor-pointer"
                    onClick={() => openEnrollModal(course.title, course.price)}
                  >
                    Enroll Now
                  </button>
 
                  <a 
-                   href={`https://wa.me/919887354080?text=I%20want%20to%20buy%20this%20course:%20${encodeURIComponent(course.title)}`}
+                   href={`https://wa.me/${getCleanWhatsApp(settings?.whatsappNumber)}?text=I%20want%20to%20enquire%20about:%20${encodeURIComponent(course.title)}%20(${formatCurrency(course.price)})`}
                    target="_blank"
                    rel="noopener noreferrer"
-                   className="w-full flex items-center justify-center bg-green-500 text-white rounded-md py-3 font-bold mb-4 hover:bg-green-600"
+                   className="w-full flex items-center justify-center bg-green-500 text-white rounded-md py-3 font-bold mb-4 hover:bg-green-600 transition"
                  >
                    Buy Now on WhatsApp
                  </a>
@@ -154,10 +180,21 @@ export default function CourseDetailPage() {
                  <div className="text-left w-full space-y-3 mt-4 border-t border-slate-100 pt-4">
                     <p className="text-xs font-bold text-slate-900 mb-2">Program Features</p>
                     <ul className="text-xs text-slate-600 space-y-2">
-                       <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500"/> {course.totalHours} Hours of Training</li>
-                       <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500"/> 100% Placement Assistance</li>
-                       <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500"/> ISO Certified</li>
-                       <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500"/> Industry Recognized Certificate</li>
+                       {course.programFeatures && course.programFeatures.length > 0 ? (
+                         course.programFeatures.map((feat, idx) => (
+                           <li key={idx} className="flex items-center gap-2">
+                             <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                             <span>{feat}</span>
+                           </li>
+                         ))
+                       ) : (
+                         <>
+                           <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0"/> {course.totalHours} Hours of Practical Training</li>
+                           <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0"/> 100% Placement & Interview Support</li>
+                           <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0"/> ISO 9001:2015 Certified Academy</li>
+                           <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0"/> Industry Recognized Certificate</li>
+                         </>
+                       )}
                     </ul>
                  </div>
               </div>
@@ -167,19 +204,19 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Full width sections matching the image flow */}
-      <CourseFutureScope />
+      <CourseFutureScope futureScope={course.futureScope} courseTitle={course.title} category={course.category} />
 
       <Container className="py-16">
-        <InstructorCard instructor={course.instructor} />
+        <InstructorCard instructor={course.instructor} trainers={course.trainers} />
       </Container>
 
       <div className="bg-slate-50 py-16 border-y border-slate-200">
          <Container>
-            <CertificateSection />
+            <CertificateSection certificateInfo={course.certificateInfo} courseTitle={course.title} />
          </Container>
       </div>
 
-      <TopPlacements />
+      <TopPlacements placements={course.placements} courseTitle={course.title} />
 
       <Testimonials />
 

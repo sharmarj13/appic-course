@@ -8,23 +8,13 @@ import {
   ArrowRight,
   Plus,
   ExternalLink,
-  HelpCircle,
-  Clock,
-  Sparkles,
-  CheckCircle2,
-  Users,
-  ShieldCheck,
-  TrendingUp,
-  Layers,
-  BarChart3,
-  Building2,
-  Calendar
+  Users
 } from 'lucide-react';
 import { useSiteData } from '../../context/SiteDataContext';
 import { formatCurrency } from '../../lib/utils';
 
 export default function AdminDashboardPage() {
-  const { courses, blogs, inquiries, settings, faqs } = useSiteData();
+  const { courses, blogs, inquiries, faqs } = useSiteData();
 
   const newInquiries = inquiries.filter((i) => i.status === 'New');
   const recentInquiries = inquiries.slice(0, 5);
@@ -61,17 +51,17 @@ export default function AdminDashboardPage() {
         <div className="flex flex-wrap items-center gap-3 shrink-0">
           <Link
             href="/admin/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 transition-all cursor-pointer"
           >
-            <Plus className="h-4 w-4 text-emerald-300" />
+            <Plus className="h-4 w-4 text-blue-100" />
             <span>New Programme</span>
           </Link>
 
           <Link
             href="/admin/blogs"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-emerald-50/60 text-slate-700 hover:text-emerald-950 border border-slate-200 hover:border-emerald-200 text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-blue-50/60 text-slate-700 hover:text-blue-700 border border-slate-200 hover:border-blue-200 text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
           >
-            <BookOpen className="h-4 w-4 text-emerald-700" />
+            <BookOpen className="h-4 w-4 text-blue-600" />
             <span>Write Article</span>
           </Link>
 
@@ -87,7 +77,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* 2. Classic Primary Metric Cards (Spacious, Prestige Emerald & Gold Tints) */}
+      {/* 2. Modern Primary Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         
         {/* Card 1: Learner Inquiries */}
@@ -126,17 +116,17 @@ export default function AdminDashboardPage() {
           </div>
         </Link>
 
-        {/* Card 2: Academic Programmes (Emerald) */}
+        {/* Card 2: Academic Programmes (Blue) */}
         <Link
           href="/admin/courses"
-          className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50/80 via-white to-white shadow-xs hover:shadow-md hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+          className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-blue-200/90 bg-gradient-to-br from-blue-50/80 via-white to-white shadow-xs hover:shadow-md hover:border-blue-300 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
         >
           <div>
             <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-900">
                 Live Programmes
               </span>
-              <div className="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 border border-blue-200 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                 <GraduationCap className="h-5 w-5" />
               </div>
             </div>
@@ -145,34 +135,34 @@ export default function AdminDashboardPage() {
               <p className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 {courses.length}
               </p>
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-200/80 text-emerald-950 border border-emerald-300">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
                 Published
               </span>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-emerald-200/60 flex items-center justify-between text-xs sm:text-sm">
+          <div className="mt-6 pt-4 border-t border-blue-200/60 flex items-center justify-between text-xs sm:text-sm">
             <span className="font-semibold text-slate-600 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="w-2 h-2 rounded-full bg-blue-600" />
               Custom Slugs Active
             </span>
-            <span className="font-bold text-emerald-900 group-hover:text-emerald-950 flex items-center gap-1 transition-colors">
+            <span className="font-bold text-blue-700 group-hover:text-blue-800 flex items-center gap-1 transition-colors">
               Manage Catalog <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </span>
           </div>
         </Link>
 
-        {/* Card 3: Editorial Articles (Teal / Sage) */}
+        {/* Card 3: Editorial Articles (Indigo) */}
         <Link
           href="/admin/blogs"
-          className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-teal-200/90 bg-gradient-to-br from-teal-50/80 via-white to-white shadow-xs hover:shadow-md hover:border-teal-300 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+          className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50/80 via-white to-white shadow-xs hover:shadow-md hover:border-indigo-300 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
         >
           <div>
             <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="text-xs font-bold uppercase tracking-wider text-teal-950">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
                 Editorial Essays
               </span>
-              <div className="w-11 h-11 rounded-xl bg-teal-100 text-teal-800 border border-teal-200 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-200 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                 <BookOpen className="h-5 w-5" />
               </div>
             </div>
@@ -181,31 +171,31 @@ export default function AdminDashboardPage() {
               <p className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 {blogs.length}
               </p>
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-teal-200/80 text-teal-950 border border-teal-300">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800 border border-indigo-200">
                 Live Slugs
               </span>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-teal-200/60 flex items-center justify-between text-xs sm:text-sm">
+          <div className="mt-6 pt-4 border-t border-indigo-200/60 flex items-center justify-between text-xs sm:text-sm">
             <span className="font-semibold text-slate-600 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-teal-500" />
+              <span className="w-2 h-2 rounded-full bg-indigo-600" />
               Playbooks & News
             </span>
-            <span className="font-bold text-teal-900 group-hover:text-teal-950 flex items-center gap-1 transition-colors">
+            <span className="font-bold text-indigo-700 group-hover:text-indigo-800 flex items-center gap-1 transition-colors">
               Editorial Studio <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </span>
           </div>
         </Link>
 
-        {/* Card 4: Enrolled Students (Luxury Forest & Mint) */}
-        <div className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-emerald-300/80 bg-gradient-to-br from-emerald-100/50 via-white to-white shadow-xs">
+        {/* Card 4: Enrolled Students (Violet) */}
+        <div className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl border border-violet-200/90 bg-gradient-to-br from-violet-50/80 via-white to-white shadow-xs">
           <div>
             <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-950">
+              <span className="text-xs font-bold uppercase tracking-wider text-violet-900">
                 Enrolled Students
               </span>
-              <div className="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center shadow-xs">
+              <div className="w-11 h-11 rounded-xl bg-violet-100 text-violet-700 border border-violet-200 flex items-center justify-center shadow-xs">
                 <Users className="h-5 w-5" />
               </div>
             </div>
@@ -214,23 +204,22 @@ export default function AdminDashboardPage() {
               <p className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 {totalStudents.toLocaleString()}
               </p>
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-200/80 text-emerald-950 border border-emerald-300">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-violet-100 text-violet-800 border border-violet-200">
                 Verified
               </span>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-emerald-200/60 flex items-center justify-between text-xs sm:text-sm">
+          <div className="mt-6 pt-4 border-t border-violet-200/60 flex items-center justify-between text-xs sm:text-sm">
             <span className="font-semibold text-slate-600 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="w-2 h-2 rounded-full bg-violet-600" />
               Global Cohorts
             </span>
-            <span className="font-bold text-emerald-900">
+            <span className="font-bold text-violet-700">
               Across 5 Tracks
             </span>
           </div>
         </div>
-
       </div>
 
       {/* 3. Classic Secondary Operational Metrics Strip */}
@@ -296,7 +285,7 @@ export default function AdminDashboardPage() {
 
             <Link
               href="/admin/inquiries"
-              className="text-xs font-bold text-emerald-800 hover:text-emerald-950 transition-colors shrink-0"
+              className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors shrink-0"
             >
               View All ({inquiries.length})
             </Link>
@@ -311,7 +300,7 @@ export default function AdminDashboardPage() {
               recentInquiries.map((inq) => (
                 <div
                   key={inq.id}
-                  className="rounded-xl border border-slate-100 bg-slate-50/70 p-4 hover:border-emerald-200/60 hover:bg-emerald-50/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  className="rounded-xl border border-slate-100 bg-slate-50/70 p-4 hover:border-blue-200/80 hover:bg-blue-50/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                 >
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -319,7 +308,7 @@ export default function AdminDashboardPage() {
                         {inq.fullName}
                       </span>
                       <span className="text-xs text-slate-400">•</span>
-                      <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 truncate">
+                      <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 truncate">
                         {inq.topic}
                       </span>
                     </div>
@@ -339,7 +328,7 @@ export default function AdminDashboardPage() {
                         inq.status === 'New'
                           ? 'bg-amber-100 text-amber-900 border border-amber-200'
                           : inq.status === 'In Progress'
-                          ? 'bg-teal-100 text-teal-900 border border-teal-200'
+                          ? 'bg-blue-100 text-blue-900 border border-blue-200'
                           : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
                       }`}
                     >
@@ -347,7 +336,7 @@ export default function AdminDashboardPage() {
                     </span>
                     <Link
                       href="/admin/inquiries"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-900 hover:bg-white transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-white transition-colors"
                       title="Inspect inquiry"
                     >
                       <ArrowRight className="h-4 w-4" />
@@ -364,7 +353,7 @@ export default function AdminDashboardPage() {
             </span>
             <Link
               href="/admin/inquiries"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-bold border border-emerald-200/80 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200 transition-colors cursor-pointer"
             >
               <span>Manage Inquiries</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -377,7 +366,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <GraduationCap className="w-5 h-5 text-emerald-700" />
+                <GraduationCap className="w-5 h-5 text-blue-600" />
                 <span>Programmes Catalog & Slugs</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -387,7 +376,7 @@ export default function AdminDashboardPage() {
 
             <Link
               href="/admin/courses"
-              className="text-xs font-bold text-emerald-800 hover:text-emerald-950 transition-colors shrink-0"
+              className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors shrink-0"
             >
               View All ({courses.length})
             </Link>
@@ -397,7 +386,7 @@ export default function AdminDashboardPage() {
             {recentCourses.map((c) => (
               <div
                 key={c.id}
-                className="rounded-xl border border-slate-100 bg-slate-50/70 p-4 hover:border-emerald-200/60 hover:bg-emerald-50/20 transition-all flex flex-col justify-between gap-2"
+                className="rounded-xl border border-slate-100 bg-slate-50/70 p-4 hover:border-blue-200/80 hover:bg-blue-50/20 transition-all flex flex-col justify-between gap-2"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -415,23 +404,23 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
 
-                  <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
+                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 shrink-0">
                     Active
                   </span>
                 </div>
 
                 <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-                  <span className="font-mono text-emerald-900 bg-white px-2 py-0.5 rounded border border-emerald-200/70 truncate max-w-[200px]">
+                  <span className="font-mono text-blue-700 bg-blue-50/60 px-2 py-0.5 rounded border border-blue-200/70 truncate max-w-[200px]">
                     /courses/{c.slug || c.id}
                   </span>
 
                   <Link
                     href={`/courses/${c.slug || c.id}`}
                     target="_blank"
-                    className="font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 transition-colors"
+                    className="font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
                   >
-                    <span>View</span>
-                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span>Preview</span>
+                    <ExternalLink className="h-3 w-3" />
                   </Link>
                 </div>
               </div>
@@ -444,7 +433,7 @@ export default function AdminDashboardPage() {
             </span>
             <Link
               href="/admin/courses"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-bold border border-emerald-200/80 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200 transition-colors cursor-pointer"
             >
               <span>Manage Courses</span>
               <ArrowRight className="h-3.5 w-3.5" />

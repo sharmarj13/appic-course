@@ -46,7 +46,7 @@ export default function AdminSettingsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/90">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-900 border border-emerald-200">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               System Configuration
             </span>
             <span className="text-slate-400 text-xs font-medium">• Global Sync Across Public Site</span>
@@ -63,16 +63,16 @@ export default function AdminSettingsPage() {
           <Link
             href="/"
             target="_blank"
-            className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50/60 hover:text-emerald-950 hover:border-emerald-200 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-blue-50/60 hover:text-blue-700 hover:border-blue-200 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-emerald-700" />
+            <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
             <span>View Live Site</span>
           </Link>
           <button
             onClick={handleSave}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-emerald-900 hover:from-emerald-900 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-emerald-900/20 border border-emerald-800 flex items-center gap-2 transition-all cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm shadow-blue-500/25 border border-blue-500/40 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <Save className="w-4 h-4 text-emerald-300" />
+            <Save className="w-4 h-4 text-blue-100" />
             <span>{savedNotice ? 'Saved!' : 'Save Settings'}</span>
           </button>
         </div>
@@ -327,7 +327,7 @@ export default function AdminSettingsPage() {
 
       {/* Reset Confirmation Modal */}
       {resetConfirm && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-slate-900 mb-2">Reset All Website Data?</h3>
             <p className="text-xs text-slate-600 mb-6 leading-relaxed">

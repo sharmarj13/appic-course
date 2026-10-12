@@ -50,6 +50,65 @@ export interface CourseFAQItem {
   answer: string;
 }
 
+export interface TrainingFeature {
+  id: string;
+  title: string;
+  description: string;
+  badge?: string;
+  iconName?: string;
+}
+
+export interface TrainingBatch {
+  id: string;
+  batchType: string;
+  days: string;
+  timing: string;
+  mode: string;
+  seatsStatus: string;
+}
+
+export interface TrainingOfferedData {
+  overview?: string;
+  highlights?: string[];
+  features?: TrainingFeature[];
+  batches?: TrainingBatch[];
+  tools?: string[];
+  deliverables?: string[];
+}
+
+export interface PlacementItem {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  package: string;
+  avatarUrl?: string;
+}
+
+export interface ToolItem {
+  name: string;
+  letter?: string;
+  color?: string;
+}
+
+export interface FutureScopeStat {
+  value: string;
+  label: string;
+}
+
+export interface FutureScopeData {
+  title?: string;
+  stats?: FutureScopeStat[];
+}
+
+export interface CertificateData {
+  title?: string;
+  subtitle?: string;
+  shareableText?: string;
+  highlights?: string[];
+  certificateType?: string;
+}
+
 export interface Course {
   id: string;
   slug: string;
@@ -71,11 +130,21 @@ export interface Course {
   imageUrl?: string;
   visualAccent: 'blue' | 'indigo' | 'emerald' | 'amber' | 'violet' | 'cyan';
   instructor: CourseInstructor;
+  trainers?: CourseInstructor[];
   whatYouWillLearn: string[];
   prerequisites: string[];
   curriculum: CurriculumModule[];
   reviews: CourseReview[];
   faqs: CourseFAQItem[];
+  trainingOffered?: TrainingOfferedData;
+  placements?: PlacementItem[];
+  toolsCovered?: (string | ToolItem)[];
+  futureScope?: FutureScopeData;
+  certificateInfo?: CertificateData;
+  programFeatures?: string[];
+  courseType?: string;
+  language?: string;
+  brochureUrl?: string;
   featured: boolean;
   updatedAt: string;
 }
